@@ -51,11 +51,11 @@ app.get("/api/health", (req, res) => {
 });
 
 // --- Geocode proxy (Nominatim). Cleans the address first — secondary unit
-//     designators like "Unit 3" / "Apt 5" / "#2" make Nominatim fail, so we
+//     designators like "Unit 7" / "Apt 5" / "#2" make Nominatim fail, so we
 //     strip them and retry progressively. Sets a proper User-Agent per policy. ---
 function cleanAddress(s) {
   return s
-    // drop "unit 3", "apt 5", "suite 200", "ste 4", "# 2", "#12", "bldg 1", "fl 3"
+    // drop "unit 7", "apt 5", "suite 200", "ste 4", "# 2", "#12", "bldg 1", "fl 3"
     .replace(/#\s*[\w-]+/g, " ")
     .replace(/\b(unit|apt|apartment|suite|ste|bldg|building|fl|floor|rm|room)\s*\.?\s*[\w-]+/gi, " ")
     .replace(/,\s*,/g, ",")     // collapse empty comma segments

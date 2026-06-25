@@ -689,7 +689,19 @@ function renderData(payload) {
   $("sortNote").textContent = ({fit:"ranked by fit","real-first":"verified macros first",volume:"most food by weight",protein:"most protein first","protein-density":"most protein per calorie","protein-value":"most protein per $",distance:"closest first","cal-asc":"fewest calories first","cal-desc":"most calories first","cal-value":"most calories per $",price:"cheapest first"})[filterState.sortBy] || "";
 
   if (!shown.length) {
-    out.innerHTML = '<div class="empty">All ' + combos.length + ' meals are hidden by your filters. Toggle "Guessed macros" / "Real macros" above to see them.</div>';
+    const why = !filterState.guessed
+      ? 'Most meals here use <b>estimated</b> macros, and you\'ve hidden those. '
+      : 'Your current filters are hiding all of them. ';
+    out.innerHTML = '<div class="empty"><b>' + combos.length + ' meal' + (combos.length===1?'':'s') + ' found — all hidden by your filters.</b><br>'
+      + why
+      + '<button id="showAllBtn" style="margin-top:12px; padding:9px 16px; border:1.5px solid var(--ink); background:var(--ink); color:var(--paper); border-radius:9px; font-weight:700; cursor:pointer; font-family:inherit; font-size:13px">Show all ' + combos.length + ' meals</button></div>';
+    const sa = $("showAllBtn");
+    if (sa) sa.onclick = () => {
+      filterState.guessed = true; filterState.real = true; filterState.hideNoMacro = false;
+      ["fGuessed","fReal"].forEach(id => { const e=$(id); if(e) e.classList.add("on"); });
+      const hn = $("fHideNoMacro"); if (hn) hn.classList.remove("on");
+      reRenderFromFilters();
+    };
     return;
   }
 
