@@ -273,7 +273,7 @@ def main():
             return round(v) if isnum(v) else None
         micros = {"sodium": mg("sodium"), "fiber": mg("dietary_fiber"),
                   "sugar": mg("sugar"), "addedSugar": None,
-                  "satFat": mg("saturated_fat")}
+                  "satFat": mg("saturated_fat"), "chol": mg("cholesterol")}
         mods, price = modifiers_and_price(name, base, PRICE[cat])
         item = {
             "name": name,

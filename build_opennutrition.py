@@ -226,7 +226,7 @@ def micros_of(n, f):
         return round(v * f) if isinstance(v, (int, float)) else None
     return {"sodium": g("sodium"), "fiber": g("dietary_fiber"),
             "sugar": g("total_sugars"), "addedSugar": g("added_sugars"),
-            "satFat": g("saturated_fats")}
+            "satFat": g("saturated_fats"), "chol": g("cholesterol")}
 
 
 # Allergens present in an item, from OpenNutrition's ingredient_analysis. Keys

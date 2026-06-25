@@ -525,7 +525,7 @@ app.get("/api/store-meals", (req, res) => {
   filter.region = detectRegion(q, REGIONS);
   applyCourses(filter, req.query.courses);
 
-  const meals = buildStoreVariants(store, { lat, lng }, filter, { now, subText: sub, limit: 10 });
+  const meals = buildStoreVariants(store, { lat, lng }, filter, { now, subText: sub, limit: 14 });
   res.json({ restaurant: name, sub, count: meals.length, meals });
 });
 

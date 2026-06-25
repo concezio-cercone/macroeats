@@ -122,7 +122,30 @@
   .searchWrap { display:flex; gap:8px; margin-bottom:14px; }
   #query { flex:1; padding:15px 18px; font-size:16px; border:1.5px solid var(--line-strong); border-radius:13px; outline:none; background:var(--surface); color:var(--text); font-family:inherit; }
   #query::placeholder { color:var(--text-faint); }
-  #go { padding:0 24px; font-size:15px; font-weight:700; border:none; border-radius:13px; background:var(--fill-strong); color:var(--on-fill); cursor:pointer; font-family:inherit; }
+  /* unified search panel + primary actions */
+  .panel { background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:2px 18px 18px; margin-bottom:18px; }
+  .panel-section { padding:16px 0; border-top:1px solid var(--line); }
+  .panel-section:first-child { border-top:none; }
+  .panel-label { display:flex; align-items:center; gap:8px; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-muted); margin-bottom:12px; }
+  .panel-label .step { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:var(--accent); color:var(--on-accent); font-size:11px; font-weight:700; }
+  .panel .savedAddrs { margin-bottom:10px; }
+  .panel .locationBar { margin-bottom:10px; }
+  .panel .mapWrap { margin-bottom:0; }
+  .panel .searchWrap { margin-bottom:0; }
+  .panel .examples { margin:12px 0 0; }
+  .optionsRow { display:flex; align-items:center; gap:12px 16px; flex-wrap:wrap; }
+  .opt { display:flex; align-items:center; gap:10px; }
+  .opt > label { font-size:13px; font-weight:600; color:var(--text-muted); white-space:nowrap; }
+  .opt-radius { flex:1; min-width:220px; }
+  .panel-actions { display:flex; gap:10px; margin-top:18px; padding-top:18px; border-top:1px solid var(--line); flex-wrap:wrap; }
+  .panel-hint { font-size:12px; color:var(--text-faint); text-align:center; margin-top:10px; }
+  .cta { flex:1 1 200px; padding:15px 18px; font-size:15px; font-weight:700; font-family:inherit; border-radius:13px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; }
+  .cta:active { transform:translateY(1px); }
+  .cta-primary { flex-grow:2; background:var(--accent); color:var(--on-accent); }
+  .cta-primary:hover { filter:brightness(1.05); }
+  .cta-secondary { background:var(--surface); color:var(--text); border:1.5px solid var(--line-strong); flex-wrap:wrap; }
+  .cta-secondary:hover { background:var(--surface-2); }
+  .cta-secondary small { font-weight:500; font-size:11.5px; color:var(--text-faint); flex-basis:100%; text-align:center; }
   .examples { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
   .example { padding:7px 13px; font-size:13px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--text-muted); cursor:pointer; font-family:inherit; }
   .example:hover { border-color:var(--line-strong); color:var(--text); }
@@ -281,10 +304,55 @@
     </div>
   </div>
 
-  <button class="decide" id="decideBtn">
-    I'm hungry — decide for me
-    <small id="decideSub"></small>
-  </button>
+  <div class="panel">
+    <div class="panel-section">
+      <div class="panel-label"><span class="step">1</span> Where to deliver</div>
+      <div class="savedAddrs" id="savedAddrs"></div>
+      <div class="locationBar">
+        <span class="pin">📍</span>
+        <input id="address" placeholder="Delivery address — e.g. 123 Main St, Los Angeles, CA 90012" aria-label="Delivery address" />
+        <button id="locate">Set location</button>
+      </div>
+      <div class="mapWrap">
+        <div id="map"></div>
+        <div class="mapHint" id="mapHint">Enter an address and tap Set location, or click the map to drop your spot.</div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-label"><span class="step">2</span> What you're after</div>
+      <div class="searchWrap">
+        <input id="query" placeholder="e.g. 800 cal, 60g protein  —  or  —  800 cal sandwich" value="800 cal, 60g protein" aria-label="Macro target" />
+      </div>
+      <div class="examples" id="examples"></div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-label"><span class="step">3</span> Options</div>
+      <div class="optionsRow">
+        <div class="opt opt-radius">
+          <label for="radius">Radius</label>
+          <input type="range" id="radius" min="1" max="15" step="1" value="6" />
+          <span class="radiusVal" id="radiusVal">6 mi</span>
+        </div>
+        <button class="toggle" id="openNowToggle" style="white-space:nowrap">Open now</button>
+        <div class="opt">
+          <label for="dessertMode">Meal type</label>
+          <select id="dessertMode" class="ctrl-select" aria-label="What to search for" title="Search for a full meal, a meal plus a dessert, or just desserts">
+            <option value="meal">🍽️ Full meal</option>
+            <option value="meal+treat">🍽️ + 🍰 Add a treat</option>
+            <option value="dessert">🍰 Just dessert</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-actions">
+      <button id="go" class="cta cta-primary">🔍 Find meals near me</button>
+      <button id="decideBtn" class="cta cta-secondary">🎲 Decide for me<small id="decideSub"></small></button>
+    </div>
+    <div class="panel-hint">Searches real restaurants near your address and builds meals to your target.</div>
+  </div>
 
   <div class="budget" id="budgetBox" style="display:none">
     <div class="budget-head">
@@ -311,41 +379,6 @@
   </div>
 
   <div id="savedMealsBox" class="savedMealsBox" style="display:none"></div>
-
-  <div class="savedAddrs" id="savedAddrs"></div>
-  <div class="locationBar">
-    <span class="pin">📍</span>
-    <input id="address" placeholder="Delivery address — e.g. 123 Main St, Los Angeles, CA 90012" aria-label="Delivery address" />
-    <button id="locate">Set location</button>
-  </div>
-
-  <div class="mapWrap">
-    <div id="map"></div>
-    <div class="mapHint" id="mapHint">Enter an address and tap Set location, or click the map to drop your spot.</div>
-  </div>
-
-  <div class="radiusBar">
-    <label for="radius">Delivery radius</label>
-    <input type="range" id="radius" min="1" max="15" step="1" value="6" />
-    <span class="radiusVal" id="radiusVal">6 mi</span>
-    <button class="toggle" id="openNowToggle" style="white-space:nowrap">Open now</button>
-    <select id="dessertMode" class="ctrl-select" aria-label="What to search for" title="Search for a full meal, a meal plus a dessert, or just desserts">
-      <option value="meal">🍽️ Full meal</option>
-      <option value="meal+treat">🍽️ + 🍰 Add a treat</option>
-      <option value="dessert">🍰 Just dessert</option>
-    </select>
-  </div>
-
-  <div class="searchWrap">
-    <input id="query" placeholder="e.g. 800 cal, 60g protein" value="800 cal, 60g protein" aria-label="Macro target" />
-    <button id="go">Search</button>
-  </div>
-  <div style="display:flex; align-items:center; gap:10px; margin:-6px 0 16px; flex-wrap:wrap;">
-    <button id="rescanBtn" class="rescanBtn">🔄 Search restaurants near me</button>
-    <span style="font-size:12px; color:var(--text-faint);">Finds real restaurants near your address and builds meals to your target.</span>
-  </div>
-
-  <div class="examples" id="examples"></div>
   <div class="chips" id="chips" style="display:none"></div>
 
   <div class="resultsHead">
@@ -355,7 +388,7 @@
   <div class="filterBar" id="filterBar" style="display:none">
     <div class="filterChips">
       <span class="fbLabel">Filter</span>
-      <button class="fbtn on" id="fGuessed" title="Show meals whose macros are estimated from cuisine">Guessed macros</button>
+      <button class="fbtn" id="fGuessed" title="Show meals whose macros are estimated from cuisine">Guessed macros</button>
       <button class="fbtn on" id="fReal" title="Show meals with verified macros">Real macros</button>
       <button class="fbtn on" id="fHideNoMacro" title="Hide restaurants that have no macro data at all">Hide no-macro spots</button>
     </div>
@@ -672,7 +705,7 @@ function deltaTag(value, ref, lowerIsRoom) {
 
 // Holds the most recent search so filter/sort don't need a re-fetch.
 let lastPayload = null;
-const filterState = { guessed: true, real: true, hideNoMacro: true, sortBy: "fit" };
+const filterState = { guessed: false, real: true, hideNoMacro: true, sortBy: "fit" };
 // Per-card re-roll state: restaurant name -> { meals:[], idx:N }
 const rerollState = {};
 // Full meal object per card sid, so action buttons can read totals/items.
@@ -812,7 +845,7 @@ function macroRing(t) {
 function microsLine(t) {
   const bits = [];
   if (t.sodium != null) bits.push('<span><b>Na</b> '+t.sodium+'mg</span>');
-  if (t.fiber != null) bits.push('<span><b>Fiber</b> '+t.fiber+'g</span>');
+  if (t.chol != null) bits.push('<span><b>Chol</b> '+t.chol+'mg</span>');
   if (t.sugar != null) bits.push('<span><b>Sugar</b> '+t.sugar+'g'+(t.addedSugar!=null?' ('+t.addedSugar+'g added)':'')+'</span>');
   if (t.satFat != null) bits.push('<span><b>Sat fat</b> '+t.satFat+'g</span>');
   return bits.length ? '<div class="micros">'+bits.join("")+'</div>' : "";
@@ -873,6 +906,7 @@ function cardInner(c, f) {
     +   '<div><div class="tVal tStrong">'+c.totals.protein+'g</div><div class="tLabel">protein'+(f.proteinMin!==null?' '+deltaTag(c.totals.protein,f.proteinMin,false):'')+'</div></div>'
     +   '<div><div class="tVal">'+c.totals.carbs+'g</div><div class="tLabel">carbs</div></div>'
     +   '<div><div class="tVal">'+c.totals.fat+'g</div><div class="tLabel">fat</div></div>'
+    +   (c.totals.fiber != null ? '<div><div class="tVal">'+c.totals.fiber+'g</div><div class="tLabel">fiber</div></div>' : '')
     + '</div>'
     + macroRing(c.totals)
     + microsLine(c.totals)
@@ -930,6 +964,14 @@ function storeBySid(sid) {
   return c ? c.store : null;
 }
 
+// Name of a meal's main dish (the "main" course item, else the first item),
+// lowercased — used to make re-roll cycle through genuinely different mains.
+function mainNameOf(meal) {
+  if (!meal || !meal.items || !meal.items.length) return "";
+  const m = meal.items.find(i => i.course === "main") || meal.items[0];
+  return ((m && m.name) || "").toLowerCase();
+}
+
 function wireCardTools(f) {
   document.querySelectorAll(".reroll").forEach(btn => {
     btn.onclick = async () => {
@@ -942,16 +984,25 @@ function wireCardTools(f) {
         btn.disabled = true; btn.textContent = "🎲 …";
         try {
           const data = await fetchStoreMeals(store, "");
-          rs = rerollState[sid] = { meals: data.meals || [], idx: 0, sub: "" };
+          rs = rerollState[sid] = { meals: data.meals || [], idx: -1, sub: "" };
         } catch { if (note) note.textContent = "Couldn't load alternatives — try again."; btn.disabled=false; btn.textContent="🎲 Re-roll meal"; return; }
         btn.disabled = false; btn.textContent = "🎲 Re-roll meal";
-      } else {
-        rs.idx = (rs.idx + 1) % Math.max(1, rs.meals.length);
       }
-      if (!rs.meals.length) { if (note) note.textContent = "No other meals fit here."; return; }
-      const meal = rs.meals[rs.idx];
-      swapCard(sid, meal, f);
-      if (note) note.textContent = "Option " + (rs.idx+1) + " of " + rs.meals.length + " · re-roll again for the next";
+      const n = rs.meals.length;
+      if (!n) { if (note) note.textContent = "No other meals fit here."; return; }
+      // Advance to the next meal whose MAIN dish differs from the one shown now,
+      // so re-roll swaps the dish rather than repeating or just changing a side.
+      const shownMain = mainNameOf(rs.idx >= 0 ? rs.meals[rs.idx] : mealRegistry[sid]);
+      let next = (rs.idx + 1) % n, changed = false;
+      for (let k = 0; k < n; k++) {
+        if (mainNameOf(rs.meals[next]) !== shownMain) { changed = true; break; }
+        next = (next + 1) % n;
+      }
+      rs.idx = next;
+      swapCard(sid, rs.meals[rs.idx], f);
+      if (note) note.textContent = n === 1 ? "This is the only meal that fits here."
+        : (changed ? "A different main · option " + (rs.idx+1) + " of " + n
+                   : "Option " + (rs.idx+1) + " of " + n);
     };
   });
   document.querySelectorAll(".subsearch button").forEach(btn => {
@@ -1308,7 +1359,6 @@ function saveSettings() {
 $("examples").innerHTML = EXAMPLES.map(ex => '<button class="example" data-q="'+esc(ex)+'">'+esc(ex)+'</button>').join("");
 $("examples").addEventListener("click", e => { const b = e.target.closest(".example"); if (b) { $("query").value = b.dataset.q; refresh(); } });
 $("go").addEventListener("click", () => refresh());
-$("rescanBtn").addEventListener("click", () => refresh());
 $("query").addEventListener("keydown", e => { if (e.key==="Enter") refresh(); });
 $("locate").addEventListener("click", geocode);
 $("address").addEventListener("keydown", e => { if (e.key==="Enter") geocode(); });
