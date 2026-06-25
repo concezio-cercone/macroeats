@@ -1,0 +1,22 @@
+# Dependencies — reinstalled with `npm install`, never committed
+node_modules/
+package-lock.json
+
+# Logs
+*.log
+srv.log
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Local backups
+*.bak
+data/restaurants.seed-backup.json
+
+# Your learned macros are LOCAL and personal — keep them out of the public repo.
+# (Comment this line out if you WANT to version your learned-chains data.)
+data/learned-chains.json

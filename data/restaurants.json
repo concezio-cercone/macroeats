@@ -1,0 +1,4 @@
+{
+  "_README": "Data model v2 with MODIFIERS. Each item has base macros (as ordered with defaults) plus `modifiers`: toggleable options carrying macro/price deltas (e.g. no rice -210cal, double protein +180cal/+31g). The engine constructs the best-fitting variant. `verified` + `source` apply per item; estimated macros are marked with a hover-explained asterisk in the UI. Modifier deltas for Chipotle come from its official per-ingredient PDF; other modifiers are reasonable estimates. Order links are built at runtime as platform search links scoped by restaurant name.",
+  "restaurants": []
+}

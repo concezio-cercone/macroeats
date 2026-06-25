@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MacroEats</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root { --ink:#16140F; --paper:#FBF7EF; --lime:#C7F02E; --line:#E7E0D0; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; background:var(--paper); color:var(--ink); font-family:'DM Sans',system-ui,sans-serif; padding:32px 16px; }
+  .shell { max-width:760px; margin:0 auto; }
+  .topbar { display:flex; justify-content:space-between; align-items:flex-start; }
+  .wordmark { font-family:'Space Grotesk',system-ui,sans-serif; font-size:40px; font-weight:700; letter-spacing:-0.04em; line-height:1; }
+  .wordmark span { background:var(--lime); padding:0 6px; border-radius:4px; margin-left:2px; }
+  .tag { margin:10px 0 0; font-size:16px; color:#5C564B; }
+  header { margin-bottom:18px; }
+  .iconbtn { border:2px solid var(--ink); background:#fff; border-radius:12px; padding:8px 12px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; white-space:nowrap; }
+  .coverage { font-size:12px; color:#9A9382; margin-bottom:18px; }
+  .coverage b { color:#5C564B; font-weight:600; }
+
+  /* hero button */
+  .decide { width:100%; padding:18px; font-size:18px; font-weight:700; font-family:inherit; color:var(--ink);
+    background:var(--lime); border:2px solid var(--ink); border-radius:16px; cursor:pointer; margin-bottom:10px;
+    display:flex; align-items:center; justify-content:center; gap:10px; }
+  .decide small { font-weight:500; font-size:13px; opacity:.7; }
+  .decide:active { transform:translateY(1px); }
+
+  /* budget bar */
+  .budget { background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:14px; }
+  .budget-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .budget-title { font-size:13px; font-weight:700; }
+  .budget-reset { font-size:12px; color:#9A9382; background:none; border:none; cursor:pointer; font-family:inherit; text-decoration:underline; }
+  .mealLog { margin-top:10px; display:flex; flex-direction:column; gap:5px; }
+  .mealLog .logItem { display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:12px; color:#5C564B; background:#FBF9F4; border:1px solid var(--line); border-radius:8px; padding:6px 9px; }
+  .mealLog .logItem .li-name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mealLog .logItem .li-macros { color:#9A9382; white-space:nowrap; }
+  .mealLog .logItem button { background:none; border:none; color:#B5532A; cursor:pointer; font-family:inherit; font-size:14px; line-height:1; padding:0 2px; }
+  .savedMealsBox { background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:14px; }
+  .savedMealsBox h3 { font-size:13px; font-weight:700; margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .savedMealsBox .sm { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 0; border-top:1px solid var(--line); }
+  .savedMealsBox .sm:first-of-type { border-top:none; }
+  .savedMealsBox .sm-info { flex:1; min-width:0; }
+  .savedMealsBox .sm-rest { font-weight:700; font-size:13px; }
+  .savedMealsBox .sm-meal { font-size:12px; color:#7A7466; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .savedMealsBox .sm-macros { font-size:11.5px; color:#9A9382; }
+  .savedMealsBox .sm-actions { display:flex; gap:6px; flex-shrink:0; }
+  .savedMealsBox .sm-actions button { font-size:11.5px; font-weight:700; padding:5px 9px; border-radius:7px; cursor:pointer; font-family:inherit; border:1.5px solid var(--line); background:#fff; color:#5C564B; }
+  .savedMealsBox .sm-actions .sm-eat { border-color:#1F7A33; color:#1F7A33; }
+  .savedMealsBox .sm-actions .sm-del { border-color:#C9897A; color:#B5532A; }
+  .meters { display:flex; gap:14px; }
+  .meter { flex:1; }
+  .meter-top { display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; }
+  .meter-top .lbl { color:#7A7466; text-transform:lowercase; }
+  .meter-top .val { font-family:'Space Grotesk',sans-serif; font-weight:600; }
+  .bar { height:7px; background:#EFEADd; border-radius:99px; overflow:hidden; }
+  .bar > span { display:block; height:100%; background:var(--ink); border-radius:99px; }
+  .bar.over > span { background:#B5532A; }
+  .logrow { display:flex; gap:8px; margin-top:12px; align-items:center; flex-wrap:wrap; }
+  .logrow input { width:74px; padding:7px 9px; border:1px solid var(--line); border-radius:8px; font-family:inherit; font-size:13px; }
+  .logrow button { padding:7px 12px; border:1px solid var(--ink); background:var(--ink); color:var(--paper); border-radius:8px; font-weight:700; cursor:pointer; font-family:inherit; font-size:13px; }
+  .logrow span { font-size:12px; color:#9A9382; }
+
+  .locationBar { display:flex; align-items:center; gap:8px; margin-bottom:10px; padding:12px 14px; background:#fff; border:2px solid var(--ink); border-radius:14px; }
+  .pin { font-size:16px; line-height:1; }
+  #address { flex:1; border:none; outline:none; font-size:15px; font-family:inherit; background:transparent; color:var(--ink); min-width:0; }
+  #address::placeholder { color:#9A9382; }
+  #locate { padding:8px 14px; font-size:13px; font-weight:700; border:2px solid var(--ink); border-radius:10px; background:var(--ink); color:var(--paper); cursor:pointer; font-family:inherit; white-space:nowrap; }
+  #locate:disabled { opacity:.5; cursor:default; }
+  .savedAddrs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+  .savedAddrs button { font-size:12px; padding:5px 10px; border:1px solid var(--line); background:#fff; border-radius:999px; cursor:pointer; font-family:inherit; color:#5C564B; }
+  .savedAddrs button.add { border-style:dashed; }
+
+  .mapWrap { position:relative; margin-bottom:10px; border:2px solid var(--ink); border-radius:14px; overflow:hidden; }
+  #map { height:230px; width:100%; background:#E7E0D0; }
+  .mapHint { position:absolute; z-index:500; top:10px; left:10px; right:10px; pointer-events:none; font-size:13px; color:#5C564B; background:rgba(251,247,239,.92); padding:8px 12px; border-radius:8px; }
+
+  .radiusBar { display:flex; align-items:center; gap:12px; margin-bottom:14px; padding:12px 14px; background:#fff; border:1px solid var(--line); border-radius:12px; }
+  .radiusBar label { font-size:13px; font-weight:600; white-space:nowrap; }
+  #radius { flex:1; accent-color:var(--ink); }
+  .radiusVal { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; min-width:54px; text-align:right; }
+
+  .searchWrap { display:flex; gap:8px; margin-bottom:14px; }
+  #query { flex:1; padding:16px 18px; font-size:16px; border:2px solid var(--ink); border-radius:14px; outline:none; background:#fff; font-family:inherit; }
+  #go { padding:0 22px; font-size:15px; font-weight:700; border:2px solid var(--ink); border-radius:14px; background:var(--ink); color:var(--paper); cursor:pointer; font-family:inherit; }
+  .examples { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
+  .example { padding:7px 12px; font-size:13px; border:1px solid #D6CFBE; border-radius:999px; background:#fff; color:#5C564B; cursor:pointer; font-family:inherit; }
+
+  .chips { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:22px; padding:12px 14px; background:#fff; border:1px solid var(--line); border-radius:12px; }
+  .chipsLabel { font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:#9A9382; }
+  .chip { font-size:13px; font-weight:600; padding:4px 10px; background:var(--lime); border-radius:999px; }
+
+  .resultsHead { display:flex; justify-content:space-between; align-items:baseline; font-size:14px; font-weight:600; margin-bottom:12px; padding-bottom:8px; border-bottom:2px solid var(--ink); }
+  .sortNote { font-weight:400; font-size:12px; color:#9A9382; }
+  .filterBar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+  .filterChips { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .fbLabel { font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:#9A9382; font-weight:700; margin-right:2px; }
+  .rescanBtn { font-size:13px; font-weight:700; padding:9px 16px; border:1.5px solid var(--ink); background:var(--ink); color:var(--paper); border-radius:10px; cursor:pointer; font-family:inherit; }
+  .rescanBtn:hover { background:#000; }
+  .rescanBtn:disabled { opacity:.5; cursor:default; }
+  .fbtn { font-size:12.5px; font-weight:600; padding:6px 12px; border:1.5px solid var(--line); background:#fff; border-radius:999px; cursor:pointer; font-family:inherit; color:#7A7466; }
+  .fbtn.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .sortWrap { display:flex; align-items:center; gap:8px; }
+  .sortWrap label { font-size:12.5px; color:#7A7466; font-weight:600; }
+  .sortWrap select { font-family:inherit; font-size:13px; padding:6px 10px; border:1.5px solid var(--line); border-radius:8px; background:#fff; color:var(--ink); cursor:pointer; }
+  .cardTools { display:flex; gap:8px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+  .reroll { font-size:12.5px; font-weight:700; padding:7px 12px; border:1.5px solid var(--ink); background:#fff; color:var(--ink); border-radius:9px; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:5px; }
+  .reroll:hover { background:#F3F0E8; }
+  .reroll:disabled { opacity:.5; cursor:default; }
+  .subsearch { flex:1; min-width:160px; display:flex; gap:6px; }
+  .subsearch input { flex:1; padding:7px 11px; border:1.5px solid var(--line); border-radius:9px; font-family:inherit; font-size:13px; }
+  .subsearch button { padding:7px 12px; border:1.5px solid var(--ink); background:var(--ink); color:var(--paper); border-radius:9px; font-weight:700; cursor:pointer; font-family:inherit; font-size:13px; }
+  .variantNote { font-size:11.5px; color:#9A9382; margin-top:6px; }
+  .mealActions { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .mealActions button { font-size:12.5px; font-weight:700; padding:7px 12px; border:1.5px solid var(--line); background:#fff; color:#5C564B; border-radius:9px; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:5px; }
+  .mealActions button:hover { border-color:var(--ink); color:var(--ink); }
+  .mealActions button.ate.done { background:#1F7A33; border-color:#1F7A33; color:#fff; }
+  .mealActions button.save.on { background:#16140F; border-color:#16140F; color:var(--paper); }
+  .fixEditor { margin-top:10px; padding:12px; border:1.5px dashed var(--line); border-radius:10px; background:#FBF9F4; display:none; }
+  .fixEditor.open { display:block; }
+  .fixRow { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px; }
+  .fixRow label { font-size:12px; color:#7A7466; font-weight:700; width:58px; }
+  .fixRow input { width:80px; padding:6px 9px; border:1.5px solid var(--line); border-radius:8px; font-family:inherit; font-size:13px; }
+  .fixEditor .fixBtns { display:flex; gap:8px; margin-top:4px; }
+  .fixEditor .fixBtns button { font-size:12.5px; font-weight:700; padding:7px 13px; border-radius:8px; cursor:pointer; font-family:inherit; border:1.5px solid var(--ink); }
+  .fixEditor .saveFix { background:var(--ink); color:var(--paper); }
+  .fixEditor .cancelFix { background:#fff; color:var(--ink); }
+  .empty { padding:28px 20px; background:#fff; border:1px dashed #C9C1AF; border-radius:14px; color:#5C564B; font-size:15px; line-height:1.5; }
+  .list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+  .card { display:flex; gap:14px; background:#fff; border:1px solid var(--line); border-radius:16px; padding:16px; animation:rise .35s ease both; }
+  .rank { font-family:'Space Grotesk',monospace; font-size:13px; font-weight:700; color:#C9C1AF; padding-top:2px; }
+  .cardBody { flex:1; min-width:0; }
+  .cardTop { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:12px; }
+  .store { font-size:17px; font-weight:700; line-height:1.25; }
+  .meta { font-size:13px; color:#7A7466; margin-top:3px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .badge { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; padding:2px 7px; border-radius:6px; }
+  .badge.verified { background:#E3F1D6; color:#2E7D32; }
+  .badge.est { background:#FBEAD0; color:#9a6a00; }
+  .badge.open { background:#E3F1D6; color:#2E7D32; }
+  .badge.closed { background:#F3DAD2; color:#B5532A; }
+  .badge.estmenu { background:#F3DAD2; color:#B5532A; }
+  .topRight { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+  .platformTag { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; padding:4px 8px; border:1.5px solid; border-radius:8px; white-space:nowrap; }
+  .fit { font-size:11px; font-weight:700; padding:4px 9px; border-radius:999px; white-space:nowrap; }
+  .fit.spot { background:var(--lime); color:#16140F; } .fit.great { background:#DCEFA8; color:#3a4a10; }
+  .fit.close { background:#FFF4D1; color:#8a6d00; } .fit.range { background:#EFEADd; color:#5C564B; }
+
+  .comboItems { margin-bottom:6px; }
+  .ci { display:flex; justify-content:space-between; gap:10px; align-items:baseline; padding:4px 0; font-size:14px; }
+  .ci-name { color:var(--ink); }
+  .ci-name .plus { color:#C9C1AF; font-weight:700; margin-right:4px; }
+  .ci-mods { display:block; font-size:12px; color:#7A7466; margin-top:1px; }
+  .ci-macros { font-family:'Space Grotesk',sans-serif; font-size:12.5px; color:#9A9382; white-space:nowrap; }
+  .divider { border-top:1px dashed #D6CFBE; margin:8px 0 10px; }
+  .totals { display:flex; align-items:flex-end; gap:18px; flex-wrap:wrap; margin-bottom:14px; }
+  .tVal { font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:600; line-height:1; }
+  .tStrong { font-size:22px; font-weight:700; }
+  .tLabel { font-size:11px; color:#9A9382; margin-top:4px; text-transform:lowercase; }
+  .delta { font-size:12px; font-weight:700; margin-left:5px; }
+  .delta.under { color:#2E7D32; } .delta.over { color:#B5532A; }
+  .cardFoot { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .price { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; }
+  .order { display:inline-block; padding:10px 16px; font-size:14px; font-weight:700; color:#fff; border-radius:10px; text-decoration:none; }
+
+  .est-star { color:#c98a00; font-weight:700; cursor:help; position:relative; margin-left:1px; }
+  .est-star .tip { visibility:hidden; opacity:0; transition:opacity .12s ease; position:absolute; bottom:130%; left:50%; transform:translateX(-50%); width:260px; max-width:72vw; background:#16140F; color:#FBF7EF; text-align:left; font-family:'DM Sans',sans-serif; font-weight:400; font-size:12.5px; line-height:1.45; padding:10px 12px; border-radius:10px; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,.22); pointer-events:none; }
+  .est-star .tip::after { content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:6px solid transparent; border-top-color:#16140F; }
+  .est-star:hover .tip, .est-star:focus .tip { visibility:visible; opacity:1; }
+  .tip-head { font-weight:700; color:#C7F02E; display:block; margin-bottom:3px; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; }
+
+  /* settings drawer */
+  .overlay { position:fixed; inset:0; background:rgba(22,20,15,.45); z-index:10000; display:none; }
+  .overlay.open { display:block; }
+  .drawer { position:fixed; top:0; right:0; height:100%; width:min(420px,92vw); background:var(--paper); z-index:10001; transform:translateX(100%); transition:transform .25s ease; overflow-y:auto; padding:22px; box-shadow:-12px 0 40px rgba(0,0,0,.2); }
+  .drawer.open { transform:none; }
+  .drawer h2 { font-family:'Space Grotesk',sans-serif; font-size:22px; margin:0 0 4px; }
+  .drawer .sub { color:#7A7466; font-size:13px; margin:0 0 18px; }
+  .field { margin-bottom:16px; }
+  .field label { display:block; font-size:13px; font-weight:700; margin-bottom:6px; }
+  .field input[type=text], .field input[type=number] { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px; font-family:inherit; font-size:14px; background:#fff; }
+  .field .hint { font-size:12px; color:#9A9382; margin-top:4px; }
+  .twocol { display:flex; gap:10px; } .twocol > div { flex:1; }
+  .toggles { display:flex; flex-wrap:wrap; gap:8px; }
+  .toggle { font-size:13px; padding:7px 12px; border:1px solid var(--line); background:#fff; border-radius:999px; cursor:pointer; font-family:inherit; }
+  .toggle.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .addr-list { display:flex; flex-direction:column; gap:8px; }
+  .addr-item { display:flex; gap:8px; align-items:center; }
+  .addr-item input { flex:1; }
+  .addr-item .del { border:none; background:none; color:#B5532A; cursor:pointer; font-size:18px; font-family:inherit; }
+  .drawer-foot { display:flex; gap:10px; margin-top:10px; }
+  .drawer-foot button { flex:1; padding:12px; border-radius:12px; font-weight:700; font-family:inherit; cursor:pointer; font-size:14px; }
+  .btn-save { background:var(--ink); color:var(--paper); border:2px solid var(--ink); }
+  .btn-close { background:#fff; color:var(--ink); border:2px solid var(--ink); }
+  footer { margin-top:28px; font-size:12.5px; color:#9A9382; line-height:1.5; text-align:center; }
+  footer code { background:#EFEADd; padding:1px 5px; border-radius:4px; }
+  @keyframes rise { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .explainer { position:relative; background:#FFF6E6; border:1.5px solid #E8D5A8; border-radius:14px; padding:16px 40px 16px 16px; margin-bottom:16px; }
+  .explainer .exClose { position:absolute; top:10px; right:12px; background:none; border:none; font-size:16px; color:#9A8B66; cursor:pointer; line-height:1; }
+  .explainer .exTitle { font-size:13px; font-weight:800; color:#7A5C1E; margin-bottom:6px; }
+  .explainer .exBody { font-size:13px; line-height:1.55; color:#5C4A28; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="topbar">
+      <div>
+        <div class="wordmark">macro<span>eats</span></div>
+        <p class="tag">Tell it your macro target. It builds the meal and does the math.</p>
+      </div>
+      <button class="iconbtn" id="openSettings">⚙ Profile</button>
+    </div>
+  </header>
+  <div class="coverage" id="coverage">Connecting to backend…</div>
+
+  <div class="explainer" id="explainer" style="display:none">
+    <button class="exClose" id="exClose" title="Got it">✕</button>
+    <div class="exTitle">How the macros work — read this once</div>
+    <div class="exBody">
+      Some restaurants have <b>✓ real macros</b> (verified from the chain's official nutrition).
+      Most discovered places show <b>* estimated macros</b> — educated guesses from the cuisine type, <i>not</i> from that specific restaurant. Estimates can be off, so treat them as ballpark.
+      When you know the real numbers, hit <b>✏️ Fix macros</b> on any meal — it saves them permanently and every future search uses them. The tool gets more accurate the more you use it.
+    </div>
+  </div>
+
+  <button class="decide" id="decideBtn">
+    I'm hungry — decide for me
+    <small id="decideSub"></small>
+  </button>
+
+  <div class="budget" id="budgetBox" style="display:none">
+    <div class="budget-head">
+      <span class="budget-title">Today's macros left</span>
+      <button class="budget-reset" id="resetBudget">reset day</button>
+    </div>
+    <div class="meters">
+      <div class="meter">
+        <div class="meter-top"><span class="lbl">calories</span><span class="val" id="calLeft"></span></div>
+        <div class="bar" id="calBar"><span></span></div>
+      </div>
+      <div class="meter">
+        <div class="meter-top"><span class="lbl">protein</span><span class="val" id="proLeft"></span></div>
+        <div class="bar" id="proBar"><span></span></div>
+      </div>
+    </div>
+    <div class="logrow">
+      <span>Ate something?</span>
+      <input id="logCal" type="number" placeholder="cal" />
+      <input id="logPro" type="number" placeholder="protein" />
+      <button id="logBtn">Log it</button>
+    </div>
+    <div id="mealLog" class="mealLog"></div>
+  </div>
+
+  <div id="savedMealsBox" class="savedMealsBox" style="display:none"></div>
+
+  <div class="savedAddrs" id="savedAddrs"></div>
+  <div class="locationBar">
+    <span class="pin">📍</span>
+    <input id="address" placeholder="Delivery address — e.g. 123 Main St, Los Angeles, CA 90012" aria-label="Delivery address" />
+    <button id="locate">Set location</button>
+  </div>
+
+  <div class="mapWrap">
+    <div id="map"></div>
+    <div class="mapHint" id="mapHint">Enter an address and tap Set location, or click the map to drop your spot.</div>
+  </div>
+
+  <div class="radiusBar">
+    <label for="radius">Delivery radius</label>
+    <input type="range" id="radius" min="1" max="15" step="1" value="6" />
+    <span class="radiusVal" id="radiusVal">6 mi</span>
+    <button class="toggle" id="openNowToggle" style="white-space:nowrap">Open now</button>
+  </div>
+
+  <div class="searchWrap">
+    <input id="query" placeholder="e.g. 800 cal, 60g protein" value="800 cal, 60g protein" aria-label="Macro target" />
+    <button id="go">Search</button>
+  </div>
+  <div style="display:flex; align-items:center; gap:10px; margin:-6px 0 16px; flex-wrap:wrap;">
+    <button id="rescanBtn" class="rescanBtn">🔄 Search restaurants near me</button>
+    <span style="font-size:12px; color:#9A9382;">Finds real restaurants near your address and builds meals to your target.</span>
+  </div>
+
+  <div class="examples" id="examples"></div>
+  <div class="chips" id="chips" style="display:none"></div>
+
+  <div class="resultsHead">
+    <span id="count"></span>
+    <span class="sortNote" id="sortNote">ranked by fit to target</span>
+  </div>
+  <div class="filterBar" id="filterBar" style="display:none">
+    <div class="filterChips">
+      <span class="fbLabel">Filter</span>
+      <button class="fbtn on" id="fGuessed" title="Show meals whose macros are estimated from cuisine">Guessed macros</button>
+      <button class="fbtn on" id="fReal" title="Show meals with verified macros">Real macros</button>
+      <button class="fbtn on" id="fHideNoMacro" title="Hide restaurants that have no macro data at all">Hide no-macro spots</button>
+    </div>
+    <div class="sortWrap">
+      <label for="sortBy">Sort</label>
+      <select id="sortBy">
+        <option value="fit">Best fit</option>
+        <option value="real-first">Verified macros first</option>
+        <option value="volume">Most food (by weight)</option>
+        <option value="protein">Most protein</option>
+        <option value="protein-density">Most protein per calorie</option>
+        <option value="protein-value">Most protein per $</option>
+        <option value="distance">Closest</option>
+        <option value="cal-asc">Fewest calories</option>
+        <option value="cal-desc">Most calories</option>
+        <option value="cal-value">Most calories per $</option>
+        <option value="price">Cheapest</option>
+      </select>
+    </div>
+  </div>
+  <div id="results"></div>
+
+  <footer>
+    Macros marked <code>*</code> are estimates — hover the asterisk to see how each was figured;
+    unmarked ones come from an official source (hover the ✓). Order buttons open the chain near
+    your set address via the platform's own search. Profile + budget are saved in this browser.
+  </footer>
+</div>
+
+<!-- settings drawer -->
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <h2>Your profile</h2>
+  <p class="sub">Saved on this device. Used by "decide for me" and to pre-fill searches.</p>
+
+  <div class="field">
+    <label>Default macro target</label>
+    <div class="twocol">
+      <div><input id="pf-cal" type="number" placeholder="calories" /><div class="hint">target calories</div></div>
+      <div><input id="pf-pro" type="number" placeholder="protein (g)" /><div class="hint">min protein</div></div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Default delivery radius (mi)</label>
+    <input id="pf-radius" type="number" min="1" max="15" placeholder="6" />
+  </div>
+
+  <div class="field">
+    <label>Dietary rules (always applied)</label>
+    <div class="toggles" id="pf-diet"></div>
+    <div class="hint">Faded options aren't supported by any restaurant in your current data yet.</div>
+  </div>
+
+  <div class="field">
+    <label>Cuisine preferences (show only these)</label>
+    <div class="toggles" id="pf-cuisines"></div>
+    <div class="hint">Leave all off to see every cuisine.</div>
+  </div>
+
+  <div class="field">
+    <label>Daily macro budget</label>
+    <div class="twocol">
+      <div><input id="pf-budcal" type="number" placeholder="daily cal" /><div class="hint">total for the day</div></div>
+      <div><input id="pf-budpro" type="number" placeholder="daily protein" /><div class="hint">total for the day</div></div>
+    </div>
+    <div class="hint">Set these to turn on the "today's macros left" tracker.</div>
+  </div>
+
+  <div class="field">
+    <label>Saved addresses</label>
+    <div class="addr-list" id="pf-addrs"></div>
+    <button class="toggle add" id="pf-addAddr" style="margin-top:8px; border-style:dashed;">+ add current / new address</button>
+  </div>
+
+  <div class="drawer-foot">
+    <button class="btn-close" id="pf-close">Close</button>
+    <button class="btn-save" id="pf-save">Save profile</button>
+  </div>
+</div>
+
+<script>
+const PLATFORM_META = { doordash:{label:"DoorDash",color:"#EB1700"}, ubereats:{label:"Uber Eats",color:"#06C167"} };
+const EXAMPLES = ["800 cal, 60g protein","1500 cal, meal and dessert","high protein under 700 cal","low carb, 50g protein","just a treat under 400 cal"];
+// Full preference taxonomy is loaded from /api/meta at startup.
+let META = { dietaryPrefs: [], cuisines: [], supportedCuisines: [], supportedDiets: [] };
+const state = { center:{ lat:34.0522, lng:-118.4100 }, radiusMi:6, openOnly:false, cuisines:[] };
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const money = n => "$" + Number(n).toFixed(2);
+function debounce(fn, ms) { let h; return (...a) => { clearTimeout(h); h = setTimeout(() => fn(...a), ms); }; }
+
+// ---- Profile + budget persistence (browser localStorage) ----
+const LS_PROFILE = "macroeats.profile.v1";
+const LS_BUDGET = "macroeats.budget.v1";
+const LS_SAVED = "macroeats.saved.v1";
+const LS_SEEN_INTRO = "macroeats.seenIntro.v1";
+function loadProfile() {
+  try { return JSON.parse(localStorage.getItem(LS_PROFILE)) || defaultProfile(); }
+  catch { return defaultProfile(); }
+}
+function defaultProfile() {
+  return { calTarget:null, proteinMin:null, radius:6, diet:[], cuisines:[], budgetCal:null, budgetPro:null, addresses:[] };
+}
+function saveProfile(p) { localStorage.setItem(LS_PROFILE, JSON.stringify(p)); }
+let profile = loadProfile();
+
+function loadBudget() {
+  try {
+    const b = JSON.parse(localStorage.getItem(LS_BUDGET));
+    const today = new Date().toISOString().slice(0,10);
+    if (!b || b.date !== today) return freshBudget();
+    // migrate older budgets that lacked carbs/fat/log
+    if (b.eatenCarbs == null) b.eatenCarbs = 0;
+    if (b.eatenFat == null) b.eatenFat = 0;
+    if (!Array.isArray(b.log)) b.log = [];
+    return b;
+  } catch { return freshBudget(); }
+}
+function freshBudget() {
+  return { date:new Date().toISOString().slice(0,10), eatenCal:0, eatenPro:0, eatenCarbs:0, eatenFat:0, log:[] };
+}
+function saveBudget(b) { localStorage.setItem(LS_BUDGET, JSON.stringify(b)); }
+let budget = loadBudget();
+
+// Log a meal's macros into today's budget, keeping a record so it can be undone.
+function logMeal(meal) {
+  const entry = {
+    id: "m" + Date.now() + Math.random().toString(36).slice(2,6),
+    name: meal.store.restaurant + " — " + meal.items.map(i => i.label).join(" + "),
+    cal: meal.totals.cal, protein: meal.totals.protein, carbs: meal.totals.carbs, fat: meal.totals.fat,
+    at: Date.now(),
+  };
+  budget.eatenCal += entry.cal; budget.eatenPro += entry.protein;
+  budget.eatenCarbs += entry.carbs; budget.eatenFat += entry.fat;
+  budget.log.push(entry);
+  saveBudget(budget); renderBudget();
+  return entry;
+}
+function unlogMeal(id) {
+  const i = budget.log.findIndex(e => e.id === id);
+  if (i < 0) return;
+  const e = budget.log[i];
+  budget.eatenCal = Math.max(0, budget.eatenCal - e.cal);
+  budget.eatenPro = Math.max(0, budget.eatenPro - e.protein);
+  budget.eatenCarbs = Math.max(0, budget.eatenCarbs - e.carbs);
+  budget.eatenFat = Math.max(0, budget.eatenFat - e.fat);
+  budget.log.splice(i, 1);
+  saveBudget(budget); renderBudget();
+}
+
+// ---- Saved meals ("your go-tos") ----
+function loadSaved() {
+  try { return JSON.parse(localStorage.getItem(LS_SAVED)) || []; } catch { return []; }
+}
+function saveSavedList(list) { localStorage.setItem(LS_SAVED, JSON.stringify(list)); }
+let savedMeals = loadSaved();
+
+function savedKey(meal) {
+  return (meal.store.restaurant + "|" + meal.items.map(i => i.label).join("+")).toLowerCase();
+}
+function isSaved(meal) { return savedMeals.some(s => s.key === savedKey(meal)); }
+function toggleSaved(meal) {
+  const key = savedKey(meal);
+  const idx = savedMeals.findIndex(s => s.key === key);
+  if (idx >= 0) { savedMeals.splice(idx, 1); }
+  else {
+    savedMeals.unshift({
+      key,
+      restaurant: meal.store.restaurant,
+      lat: meal.store.lat, lng: meal.store.lng,
+      label: meal.items.map(i => i.label).join(" + "),
+      cal: meal.totals.cal, protein: meal.totals.protein, carbs: meal.totals.carbs, fat: meal.totals.fat,
+      price: meal.totals.price,
+      verified: !!meal.verified,
+      discovered: !!meal.store.discovered,
+      savedAt: Date.now(),
+    });
+  }
+  saveSavedList(savedMeals);
+  return idx < 0; // true if now saved
+}
+
+// remaining macros for the day (or null if no budget set)
+function remaining() {
+  if (!profile.budgetCal && !profile.budgetPro) return null;
+  return {
+    cal: profile.budgetCal ? Math.max(0, profile.budgetCal - budget.eatenCal) : null,
+    pro: profile.budgetPro ? Math.max(0, profile.budgetPro - budget.eatenPro) : null,
+  };
+}
+
+// Build a query string from a target (used by decide-for-me and budget)
+function queryFromMacros(cal, pro) {
+  const parts = [];
+  if (cal) parts.push(cal + " cal");
+  if (pro) parts.push(pro + "g protein");
+  return parts.join(", ");
+}
+
+// ---- Map ----
+let map, centerMarker, radiusCircle, storeLayer;
+function initMap() {
+  map = L.map("map").setView([state.center.lat, state.center.lng], 12);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom:19, attribution:"© OpenStreetMap" }).addTo(map);
+  storeLayer = L.layerGroup().addTo(map);
+  map.on("click", e => setCenter(e.latlng.lat, e.latlng.lng, true));
+  drawCenter();
+  refresh();
+}
+function drawCenter() {
+  if (centerMarker) map.removeLayer(centerMarker);
+  if (radiusCircle) map.removeLayer(radiusCircle);
+  centerMarker = L.circleMarker([state.center.lat, state.center.lng], { radius:7, color:"#16140F", weight:3, fillColor:"#C7F02E", fillOpacity:1 }).addTo(map);
+  radiusCircle = L.circle([state.center.lat, state.center.lng], { radius:state.radiusMi*1609.34, color:"#16140F", weight:1.5, fillColor:"#16140F", fillOpacity:0.06 }).addTo(map);
+}
+function setCenter(lat, lng, fromMap) {
+  state.center = { lat, lng }; drawCenter();
+  if (fromMap) { $("address").value = lat.toFixed(4) + ", " + lng.toFixed(4); }
+  refresh();
+}
+function fitToRadius() { if (radiusCircle) map.fitBounds(radiusCircle.getBounds(), { padding:[20,20] }); }
+
+// ---- Backend ----
+async function loadCoverage() {
+  try {
+    const h = await (await fetch("/api/health")).json();
+    $("coverage").innerHTML = "Backend connected · restaurants are discovered live near your address. Macros are estimated from cuisine — verify before relying on them.";
+  } catch { $("coverage").innerHTML = "⚠ Backend not reachable. Start it with <b>start.bat</b> and reload."; }
+  try { META = await (await fetch("/api/meta")).json(); } catch {}
+}
+async function geocode() {
+  const q = ($("address").value || "").trim(); if (!q) return;
+  $("locate").disabled = true; $("locate").textContent = "Locating...";
+  try {
+    const d = await (await fetch("/api/geocode?q=" + encodeURIComponent(q))).json();
+    if (d.found) {
+      state.center = { lat:d.lat, lng:d.lng }; drawCenter(); fitToRadius(); refresh();
+      $("mapHint").style.display = "block"; $("mapHint").textContent = "📍 " + d.label;
+      setTimeout(() => { $("mapHint").style.display = "none"; }, 4500);
+    } else { $("mapHint").style.display = "block"; $("mapHint").textContent = "Couldn't find that address. Try without the unit number, or street + city + ZIP. You can also click the map."; }
+  } catch { $("mapHint").style.display = "block"; $("mapHint").textContent = "Geocode failed — is the backend running?"; }
+  finally { $("locate").disabled = false; $("locate").textContent = "Set location"; }
+}
+async function fetchCombos(overrideQuery, discoverOverride) {
+  // Diet rules from the profile become both query text (for macro-affecting ones
+  // like 'low carb'/'no cheese') and backend diet tags (for capability filters
+  // like vegetarian/halal). Cuisines and open-now are separate params.
+  const dietTags = (profile.diet || []).filter(d => !/no cheese|low carb|keto/i.test(d));
+  const params = new URLSearchParams({
+    lat: state.center.lat, lng: state.center.lng, radius: state.radiusMi,
+    q: overrideQuery != null ? overrideQuery : $("query").value,
+    now: Date.now(),
+  });
+  if (state.openOnly) params.set("openOnly", "1");
+  // discoverOverride controls whether to pull live nearby restaurants.
+  // Defaults to ON (the app is discovery-based now).
+  const discover = discoverOverride != null ? discoverOverride : true;
+  if (discover) params.set("discover", "1");
+  if (state.cuisines.length) params.set("cuisines", state.cuisines.join(","));
+  if (dietTags.length) params.set("diets", dietTags.join(","));
+  const r = await fetch("/api/combos?" + params.toString());
+  if (!r.ok) throw new Error("combos " + r.status);
+  return r.json();
+}
+
+function buildOrderUrl(platform, restaurant) {
+  const name = encodeURIComponent(restaurant);
+  if (platform === "ubereats") return "https://www.ubereats.com/search?q=" + name;
+  return "https://www.doordash.com/search/store/" + name + "/";
+}
+
+// ---- Render ----
+function activeChips(f) {
+  const c = [];
+  if (f.calTarget!==null) c.push("aim "+f.calTarget+" cal");
+  if (f.calMax!==null) c.push("<= "+f.calMax+" cal");
+  if (f.calMin!==null) c.push(">= "+f.calMin+" cal");
+  if (f.proteinMin!==null) c.push(">= "+f.proteinMin+"g protein");
+  if (f.proteinMax!==null) c.push("<= "+f.proteinMax+"g protein");
+  if (f.fatMax!==null) c.push("<= "+f.fatMax+"g fat");
+  if (f.carbsMax!==null) c.push("<= "+f.carbsMax+"g carbs");
+  (f.courses||[]).forEach(x => c.push(x === "dessert" ? "+ dessert" : x));
+  if (f.region) c.push(f.region);
+  if (f.cheese===true) c.push("with cheese");
+  if (f.cheese===false) c.push("no cheese");
+  if (f.wantsCarbs===false) c.push("low carb");
+  if (f.carbType) c.push(f.carbType+" carbs");
+  if (f.food) c.push('"'+f.food+'"');
+  return c;
+}
+function deltaTag(value, ref, lowerIsRoom) {
+  if (ref===null || ref===undefined) return "";
+  const d = value - ref;
+  if (d === 0) return '<span class="delta under">on target</span>';
+  const cls = (lowerIsRoom ? d < 0 : d > 0) ? "under" : "over";
+  return '<span class="delta '+cls+'">'+(d>0?"+":"")+d+'</span>';
+}
+
+// Holds the most recent search so filter/sort don't need a re-fetch.
+let lastPayload = null;
+const filterState = { guessed: true, real: true, hideNoMacro: true, sortBy: "fit" };
+// Per-card re-roll state: restaurant name -> { meals:[], idx:N }
+const rerollState = {};
+// Full meal object per card sid, so action buttons can read totals/items.
+const mealRegistry = {};
+
+function applyFiltersAndSort(combos) {
+  let list = combos.slice();
+  list = list.filter(c => {
+    const isGuessed = c.estimatedMenu || c.items.some(i => i.templated);
+    const isReal = c.verified;
+    if (filterState.hideNoMacro && !isReal && !isGuessed) return false;
+    if (!filterState.guessed && !filterState.real) return false;
+    if (!filterState.guessed && isGuessed && !isReal) return false;
+    if (!filterState.real && isReal && !isGuessed) return false;
+    return true;
+  });
+  const by = filterState.sortBy;
+  // helpers for derived sort keys
+  const weight = c => (c.totals.protein || 0) + (c.totals.carbs || 0) + (c.totals.fat || 0); // "food by weight" proxy (g)
+  const pDensity = c => (c.totals.cal > 0 ? c.totals.protein / c.totals.cal : 0);            // protein per calorie
+  const pValue = c => (c.totals.price > 0 ? c.totals.protein / c.totals.price : 0);          // protein per $
+  const cValue = c => (c.totals.price > 0 ? c.totals.cal / c.totals.price : 0);              // calories per $
+  const realRank = c => (c.verified ? 0 : (c.estimatedMenu ? 2 : 1));                        // verified < estimated-chain < estimated-menu
+  list.sort((a, b) => {
+    if (by === "distance") return a.store.distance - b.store.distance;
+    if (by === "protein") return b.totals.protein - a.totals.protein;
+    if (by === "cal-asc") return a.totals.cal - b.totals.cal;
+    if (by === "cal-desc") return b.totals.cal - a.totals.cal;
+    if (by === "price") return a.totals.price - b.totals.price;
+    if (by === "volume") return weight(b) - weight(a);
+    if (by === "protein-density") return pDensity(b) - pDensity(a);
+    if (by === "protein-value") return pValue(b) - pValue(a);
+    if (by === "cal-value") return cValue(b) - cValue(a);
+    if (by === "real-first") { const d = realRank(a) - realRank(b); return d !== 0 ? d : (b.totals.protein - a.totals.protein); }
+    return 0;
+  });
+  return list;
+}
+
+function renderData(payload) {
+  lastPayload = payload;
+  const f = payload.query || {};
+  const combos = payload.combos || [];
+
+  if (storeLayer) {
+    storeLayer.clearLayers();
+    combos.forEach(c => {
+      const p = PLATFORM_META[c.store.platform] || { color:"#16140F", label:c.store.platform };
+      L.circleMarker([c.store.lat, c.store.lng], { radius:6, color:"#fff", weight:2, fillColor:p.color, fillOpacity:1 })
+        .bindPopup("<b>"+esc(c.store.restaurant)+"</b><br>"+c.items.map(i=>esc(i.label)).join(" + ")+"<br>"+c.totals.cal+" cal · "+c.totals.protein+"g protein").addTo(storeLayer);
+    });
+  }
+
+  const chips = activeChips(f), chipsEl = $("chips");
+  if (chips.length) { chipsEl.style.display="flex"; chipsEl.innerHTML = '<span class="chipsLabel">Target</span>' + chips.map(c => '<span class="chip">'+esc(c)+'</span>').join(""); }
+  else chipsEl.style.display = "none";
+
+  const disc = payload.discovery || {};
+  const out = $("results");
+  if (!combos.length) {
+    $("filterBar").style.display = "none";
+    let why;
+    if (disc.error) {
+      why = '<b>OpenStreetMap\'s servers are busy right now.</b><br>This is temporary — the free public map servers get overloaded. <b>Just search again</b> (it usually works on the 2nd or 3rd try). If it keeps failing, drop your radius to 2–3 mi — smaller searches get served more reliably when the servers are under load.';
+    } else if (disc.attempted && disc.found === 0) {
+      why = '<b>No restaurants found near this location in OpenStreetMap.</b><br>Try widening the radius, or double-check your address is set correctly (the pin on the map shows where it\'s searching). OpenStreetMap coverage varies by area.';
+    } else if (disc.found > 0) {
+      why = '<b>Found ' + disc.found + ' restaurants nearby, but none with usable macro data hit your target.</b><br>' + (disc.discarded ? disc.discarded + ' were skipped for having no macro data. ' : '') + 'Loosen the target (e.g. a wider calorie range), or adjust your dietary/cuisine filters.';
+    } else {
+      why = 'No meals matched. Widen the radius, loosen the macros, or move your pin.';
+    }
+    $("count").textContent = (disc.usable ? disc.usable + " usable nearby · " : "") + "0 meals";
+    out.innerHTML = '<div class="empty">' + why + '</div>';
+    return;
+  }
+
+  $("filterBar").style.display = "flex";
+  const shown = applyFiltersAndSort(combos);
+
+  let countMsg = shown.length + " meal" + (shown.length===1?"":"s");
+  if (shown.length !== combos.length) countMsg += " (of " + combos.length + ")";
+  if (disc.usable) countMsg += " · " + disc.usable + " nearby restaurants";
+  if (disc.collapsedFrom && disc.afterCollapse && disc.collapsedFrom > disc.afterCollapse)
+    countMsg += " · " + (disc.collapsedFrom - disc.afterCollapse) + " duplicate locations merged";
+  if (disc.chainMatched) countMsg += " · " + disc.chainMatched + " with ✓ real macros";
+  if (disc.discarded) countMsg += " · " + disc.discarded + " skipped (no macro data)";
+  if (disc.error) countMsg += " · ⚠ discovery error";
+  $("count").textContent = countMsg;
+  $("sortNote").textContent = ({fit:"ranked by fit","real-first":"verified macros first",volume:"most food by weight",protein:"most protein first","protein-density":"most protein per calorie","protein-value":"most protein per $",distance:"closest first","cal-asc":"fewest calories first","cal-desc":"most calories first","cal-value":"most calories per $",price:"cheapest first"})[filterState.sortBy] || "";
+
+  if (!shown.length) {
+    out.innerHTML = '<div class="empty">All ' + combos.length + ' meals are hidden by your filters. Toggle "Guessed macros" / "Real macros" above to see them.</div>';
+    return;
+  }
+
+  out.innerHTML = '<ul class="list">' + shown.map((c,i) => cardShell(c, i, f)).join("") + '</ul>';
+  wireCardTools(f);
+}
+
+// The macro lines + totals + order links inside a card (without the outer <li>
+// or the re-roll tools) — reused when re-roll swaps a card's meal.
+function cardInner(c, f) {
+  const p = PLATFORM_META[c.store.platform] || { color:"#16140F", label:c.store.platform };
+  const calRef = f.calTarget!==null ? f.calTarget : (f.calMax!==null ? f.calMax : null);
+  const items = c.items.map((it,idx) => {
+    let mark;
+    if (it.verified) mark = '<span class="est-star" style="color:#2E7D32" tabindex="0">✓<span class="tip"><span class="tip-head">Verified macros</span>'+esc(it.source||'From the restaurant or an official source.')+'</span></span>';
+    else if (it.templated) mark = '<span class="est-star" style="color:#B5532A" tabindex="0" title="Rough estimate — hover">**<span class="tip"><span class="tip-head" style="color:#FBC8A0">⚠ Rough estimate — not from this restaurant</span>'+esc(it.source||'')+'</span></span>';
+    else mark = '<span class="est-star" tabindex="0" title="Estimated — hover for how">*<span class="tip"><span class="tip-head">Estimated — how I got this</span>'+esc(it.source||'Estimated; not from the restaurant.')+'</span></span>';
+    const modLine = (it.mods && it.mods.length) ? '<span class="ci-mods">'+esc(it.mods.join(", "))+'</span>' : '';
+    return '<div class="ci"><span class="ci-name">'+(idx>0?'<span class="plus">+</span>':'')+esc(it.name)+modLine+'</span>'
+      + '<span class="ci-macros">'+it.cal+' cal · '+it.protein+'g P'+mark+'</span></div>';
+  }).join("");
+  const anyEst = c.items.some(it => !it.verified);
+  const totalStar = anyEst ? '<span class="est-star" tabindex="0" title="Includes estimates">*<span class="tip"><span class="tip-head">This total includes estimates</span>One or more items use estimated macros (marked above). Hover each to see how.</span></span>' : '';
+  let vBadge;
+  if (c.estimatedMenu) vBadge = '<span class="badge estmenu">⚠ estimated menu **</span>';
+  else if (c.verified) vBadge = '<span class="badge verified">verified macros</span>';
+  else vBadge = '<span class="badge est">includes estimates *</span>';
+
+  let footLinks;
+  if (c.store.discovered) {
+    footLinks = '<a class="order" href="https://www.doordash.com/search/store/'+encodeURIComponent(c.store.restaurant)+'/" target="_blank" rel="noreferrer" style="background:#EB1700; flex:1; text-align:center; font-size:13px">Find on DoorDash →</a>'
+      + '<a class="order" href="https://www.ubereats.com/search?q='+encodeURIComponent(c.store.restaurant)+'" target="_blank" rel="noreferrer" style="background:#06C167; flex:1; text-align:center; font-size:13px">Find on Uber Eats →</a>';
+  } else {
+    const orderUrl = buildOrderUrl(c.store.platform, c.store.restaurant);
+    footLinks = '<a class="order" href="'+esc(orderUrl)+'" target="_blank" rel="noreferrer" style="background:'+p.color+'">Order on '+p.label+' →</a>';
+  }
+  let openBadge = "";
+  if (c.store.openKnown) {
+    openBadge = c.store.open
+      ? '<span class="badge open">open · ' + esc(c.store.hoursToday || "") + '</span>'
+      : '<span class="badge closed">closed · ' + esc(c.store.hoursToday || "") + '</span>';
+  }
+  return '<div class="cardTop"><div>'
+    +   '<div class="store">'+esc(c.store.restaurant)+'</div>'
+    +   '<div class="meta">'+esc(c.store.region)+' · '+c.store.distance.toFixed(1)+' mi '+openBadge+' '+vBadge
+    +     ((c.store.locationCount && c.store.locationCount > 1) ? ' <span class="badge" style="background:#EEE9DD; color:#7A7466">'+c.store.locationCount+' locations · nearest'+(c.store.open?' open':'')+' shown</span>' : '')
+    +   '</div>'
+    + '</div><div class="topRight"><span class="fit '+c.fit.class+'">'+c.fit.label+'</span></div></div>'
+    + '<div class="comboItems">'+items+'</div>'
+    + '<div class="divider"></div>'
+    + '<div class="totals">'
+    +   '<div><div class="tVal tStrong">'+c.totals.cal+totalStar+'</div><div class="tLabel">cal'+(calRef!==null?' '+deltaTag(c.totals.cal,calRef,true):'')+'</div></div>'
+    +   '<div><div class="tVal tStrong">'+c.totals.protein+'g</div><div class="tLabel">protein'+(f.proteinMin!==null?' '+deltaTag(c.totals.protein,f.proteinMin,false):'')+'</div></div>'
+    +   '<div><div class="tVal">'+c.totals.carbs+'g</div><div class="tLabel">carbs</div></div>'
+    +   '<div><div class="tVal">'+c.totals.fat+'g</div><div class="tLabel">fat</div></div>'
+    + '</div>'
+    + '<div class="cardFoot" style="flex-wrap:wrap; gap:8px"><span class="price">'+money(c.totals.price)+'</span>'+footLinks+'</div>';
+}
+
+// Full card: rank + inner + actions + re-roll/sub-search tools.
+function cardShell(c, i, f) {
+  const sid = encodeURIComponent(c.store.restaurant + "@" + c.store.lat + "," + c.store.lng);
+  mealRegistry[sid] = c;  // so action handlers can read the full meal
+  const saved = isSaved(c);
+  return '<li class="card" data-sid="'+sid+'"'+(c.store.open===false?' style="opacity:.6"':'')+'>'
+    + '<div class="rank">'+String(i+1).padStart(2,"0")+'</div>'
+    + '<div class="cardBody">'
+    +   '<div class="cardInner">'+cardInner(c, f)+'</div>'
+    +   '<div class="mealActions">'
+    +     '<button class="ate" data-sid="'+sid+'" title="Log this meal into today\'s macros">✓ I ate this</button>'
+    +     '<button class="fix" data-sid="'+sid+'" title="Correct these macros and remember them">✏️ Fix macros</button>'
+    +     '<button class="save'+(saved?' on':'')+'" data-sid="'+sid+'" title="Save to your go-to meals">'+(saved?'★ Saved':'☆ Save')+'</button>'
+    +   '</div>'
+    +   '<div class="fixEditor" data-sid="'+sid+'">'
+    +     '<div style="font-size:12px; color:#7A7466; margin-bottom:8px">Enter the real macros for <b>'+esc(c.store.restaurant)+'</b> — saved and reused for every future match.</div>'
+    +     '<div class="fixRow"><label>Calories</label><input type="number" class="fx-cal" value="'+c.totals.cal+'" /><label style="width:auto">Protein</label><input type="number" class="fx-pro" value="'+c.totals.protein+'" /></div>'
+    +     '<div class="fixRow"><label>Carbs</label><input type="number" class="fx-carb" value="'+c.totals.carbs+'" /><label style="width:auto">Fat</label><input type="number" class="fx-fat" value="'+c.totals.fat+'" /></div>'
+    +     '<div class="fixBtns"><button class="saveFix" data-sid="'+sid+'">Save real macros</button><button class="cancelFix" data-sid="'+sid+'">Cancel</button></div>'
+    +   '</div>'
+    +   '<div class="cardTools">'
+    +     '<button class="reroll" data-sid="'+sid+'">🎲 Re-roll meal</button>'
+    +     '<div class="subsearch"><input type="text" placeholder="ask this spot… e.g. &quot;chicken, no rice&quot;" data-sid="'+sid+'" /><button data-sid="'+sid+'">Go</button></div>'
+    +   '</div>'
+    +   '<div class="variantNote" data-sid="'+sid+'"></div>'
+    + '</div></li>';
+}
+
+// Fetch ranked meals for one store (re-roll + sub-search).
+async function fetchStoreMeals(store, sub) {
+  const params = new URLSearchParams({
+    lat: state.center.lat, lng: state.center.lng,
+    name: store.restaurant, slat: store.lat, slng: store.lng,
+    q: queryWithDiet($("query").value), now: Date.now(),
+  });
+  if (store.cuisines && store.cuisines.length) params.set("cuisine", store.cuisines.join(";"));
+  if (sub) params.set("sub", sub);
+  const r = await fetch("/api/store-meals?" + params.toString());
+  if (!r.ok) throw new Error("store-meals " + r.status);
+  return r.json();
+}
+
+function storeBySid(sid) {
+  if (!lastPayload) return null;
+  const c = (lastPayload.combos || []).find(x =>
+    encodeURIComponent(x.store.restaurant + "@" + x.store.lat + "," + x.store.lng) === sid);
+  return c ? c.store : null;
+}
+
+function wireCardTools(f) {
+  document.querySelectorAll(".reroll").forEach(btn => {
+    btn.onclick = async () => {
+      const sid = btn.dataset.sid;
+      const store = storeBySid(sid);
+      if (!store) return;
+      const note = document.querySelector('.variantNote[data-sid="'+sid+'"]');
+      let rs = rerollState[sid];
+      if (!rs || rs.sub) {
+        btn.disabled = true; btn.textContent = "🎲 …";
+        try {
+          const data = await fetchStoreMeals(store, "");
+          rs = rerollState[sid] = { meals: data.meals || [], idx: 0, sub: "" };
+        } catch { if (note) note.textContent = "Couldn't load alternatives — try again."; btn.disabled=false; btn.textContent="🎲 Re-roll meal"; return; }
+        btn.disabled = false; btn.textContent = "🎲 Re-roll meal";
+      } else {
+        rs.idx = (rs.idx + 1) % Math.max(1, rs.meals.length);
+      }
+      if (!rs.meals.length) { if (note) note.textContent = "No other meals fit here."; return; }
+      const meal = rs.meals[rs.idx];
+      swapCard(sid, meal, f);
+      if (note) note.textContent = "Option " + (rs.idx+1) + " of " + rs.meals.length + " · re-roll again for the next";
+    };
+  });
+  document.querySelectorAll(".subsearch button").forEach(btn => {
+    btn.onclick = () => runSub(btn.dataset.sid, f);
+  });
+  document.querySelectorAll(".subsearch input").forEach(inp => {
+    inp.onkeydown = e => { if (e.key === "Enter") runSub(inp.dataset.sid, f); };
+  });
+
+  // ---- "I ate this": log the meal into today's budget ----
+  document.querySelectorAll(".mealActions .ate").forEach(btn => {
+    btn.onclick = () => {
+      const sid = btn.dataset.sid;
+      const meal = currentMealFor(sid);
+      if (!meal) return;
+      logMeal(meal);
+      btn.classList.add("done");
+      btn.textContent = "✓ Logged";
+      const note = document.querySelector('.variantNote[data-sid="'+sid+'"]');
+      const r = remaining();
+      if (note) note.textContent = r
+        ? "Logged. " + (r.cal!=null ? r.cal + " cal" : "") + (r.cal!=null && r.pro!=null ? " · " : "") + (r.pro!=null ? r.pro + "g protein" : "") + " left today."
+        : "Logged into today's macros.";
+      setTimeout(() => { btn.classList.remove("done"); btn.textContent = "✓ I ate this"; }, 2600);
+    };
+  });
+
+  // ---- Save / unsave a go-to meal ----
+  document.querySelectorAll(".mealActions .save").forEach(btn => {
+    btn.onclick = () => {
+      const sid = btn.dataset.sid;
+      const meal = currentMealFor(sid);
+      if (!meal) return;
+      const nowSaved = toggleSaved(meal);
+      btn.classList.toggle("on", nowSaved);
+      btn.textContent = nowSaved ? "★ Saved" : "☆ Save";
+      renderSavedMeals();
+    };
+  });
+
+  // ---- Fix macros: open editor ----
+  document.querySelectorAll(".mealActions .fix").forEach(btn => {
+    btn.onclick = () => {
+      const sid = btn.dataset.sid;
+      const ed = document.querySelector('.fixEditor[data-sid="'+sid+'"]');
+      if (ed) ed.classList.toggle("open");
+    };
+  });
+  document.querySelectorAll(".fixEditor .cancelFix").forEach(btn => {
+    btn.onclick = () => {
+      const ed = document.querySelector('.fixEditor[data-sid="'+btn.dataset.sid+'"]');
+      if (ed) ed.classList.remove("open");
+    };
+  });
+  document.querySelectorAll(".fixEditor .saveFix").forEach(btn => {
+    btn.onclick = () => saveFixedMacros(btn.dataset.sid, f);
+  });
+}
+
+// The meal currently shown on a card — the re-rolled variant if one is active,
+// else the originally rendered meal.
+function currentMealFor(sid) {
+  const rs = rerollState[sid];
+  if (rs && rs.meals && rs.meals.length) return rs.meals[rs.idx];
+  return mealRegistry[sid] || null;
+}
+
+// Save user-corrected macros to the persistent learned store on the backend.
+async function saveFixedMacros(sid, f) {
+  const meal = currentMealFor(sid);
+  if (!meal) return;
+  const ed = document.querySelector('.fixEditor[data-sid="'+sid+'"]');
+  const note = document.querySelector('.variantNote[data-sid="'+sid+'"]');
+  const cal = parseInt(ed.querySelector(".fx-cal").value) || 0;
+  const protein = parseInt(ed.querySelector(".fx-pro").value) || 0;
+  const carbs = parseInt(ed.querySelector(".fx-carb").value) || 0;
+  const fat = parseInt(ed.querySelector(".fx-fat").value) || 0;
+  // Build a single-item learned entry from the corrected totals. The item label
+  // mirrors what the meal is, so it shows sensibly next time.
+  const entry = {
+    name: meal.store.restaurant,
+    region: meal.store.region || (meal.store.cuisines && meal.store.cuisines[0]) || "Restaurant",
+    cuisines: meal.store.cuisines || null,
+    items: [{
+      name: meal.items.map(i => i.name).join(" + ") || "Meal",
+      course: "main", carbType: "refined", cheese: false,
+      base: { cal, protein, carbs, fat },
+      price: meal.totals.price || 0,
+      modifiers: [],
+    }],
+  };
+  try {
+    const r = await fetch("/api/learned", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(entry),
+    });
+    if (!r.ok) throw new Error("save failed");
+    if (ed) ed.classList.remove("open");
+    if (note) note.textContent = "✓ Saved real macros for " + meal.store.restaurant + " — every future match will use these.";
+  } catch {
+    if (note) note.textContent = "Couldn't save — is the backend running?";
+  }
+}
+
+async function runSub(sid, f) {
+  const store = storeBySid(sid);
+  if (!store) return;
+  const inp = document.querySelector('.subsearch input[data-sid="'+sid+'"]');
+  const note = document.querySelector('.variantNote[data-sid="'+sid+'"]');
+  const sub = (inp.value || "").trim();
+  if (!sub) return;
+  if (note) note.textContent = "asking " + store.restaurant + "…";
+  try {
+    const data = await fetchStoreMeals(store, sub);
+    const meals = data.meals || [];
+    if (!meals.length) { if (note) note.textContent = 'Nothing at ' + store.restaurant + ' matched "' + sub + '" within your macro target. Try different words or loosen the target.'; return; }
+    rerollState[sid] = { meals, idx: 0, sub };
+    swapCard(sid, meals[0], f);
+    const extra = meals.length > 1 ? ' · re-roll to see ' + (meals.length-1) + ' more like this' : '';
+    if (note) note.textContent = 'Best match for "' + sub + '"' + (store.discovered ? ' (from an estimated menu)' : '') + extra;
+  } catch { if (note) note.textContent = "Sub-search failed — try again."; }
+}
+
+function swapCard(sid, meal, f) {
+  const li = document.querySelector('.card[data-sid="'+sid+'"]');
+  if (!li) return;
+  const inner = li.querySelector(".cardInner");
+  if (inner) inner.innerHTML = cardInner(meal, f);
+  li.style.opacity = meal.store.open === false ? ".6" : "";
+}
+
+function reRenderFromFilters() { if (lastPayload) renderData(lastPayload); }
+function wireFilterControls() {
+  const toggle = (id, key) => {
+    const el = $(id); if (!el) return;
+    el.onclick = () => { filterState[key] = !filterState[key]; el.classList.toggle("on", filterState[key]); reRenderFromFilters(); };
+  };
+  toggle("fGuessed", "guessed");
+  toggle("fReal", "real");
+  toggle("fHideNoMacro", "hideNoMacro");
+  const sb = $("sortBy");
+  if (sb) sb.onchange = () => { filterState.sortBy = sb.value; reRenderFromFilters(); };
+}
+
+// Fold only the MACRO-AFFECTING diet rules into the query text (low carb / no
+// cheese / keto). Capability tags (vegetarian, halal...) are sent as params.
+function queryWithDiet(base) {
+  let q = base;
+  for (const d of (profile.diet || [])) {
+    if (!/no cheese|low carb|keto/i.test(d)) continue;
+    if (q.toLowerCase().includes(d.toLowerCase())) continue;
+    q += ", " + d;
+  }
+  return q;
+}
+
+async function refresh(overrideQuery) {
+  const base = overrideQuery != null ? overrideQuery : $("query").value;
+
+  // Everything comes from live discovery now, so show a clear loading state
+  // while we search OpenStreetMap and build meals from real nearby places.
+  $("count").textContent = "searching restaurants near you…";
+  $("results").innerHTML = '<div class="empty">🔎 Searching every restaurant within ' + state.radiusMi + ' mi and building meals to your target…<br><span style="font-size:12px; color:#9A9382">A wide radius in a dense area can take 10–30 seconds for a complete sweep.</span></div>';
+
+  try {
+    let payload = await fetchCombos(queryWithDiet(base), true);
+    // If discovery itself failed (busy OSM servers), auto-retry once after a
+    // short pause before surfacing the error — these failures are usually
+    // transient and a retry tends to succeed.
+    if (payload.discovery && payload.discovery.error && !payload.combos.length) {
+      $("results").innerHTML = '<div class="empty">🔁 OpenStreetMap was busy — retrying in a moment…</div>';
+      await new Promise(r => setTimeout(r, 1500));
+      payload = await fetchCombos(queryWithDiet(base), true);
+    }
+    renderData(payload);
+  } catch (e) {
+    $("count").textContent = "";
+    $("results").innerHTML = '<div class="empty">Couldn\'t reach the backend. Make sure <b>start.bat</b> is still running, then search again.</div>';
+  }
+}
+const refreshDebounced = debounce(() => refresh(), 180);
+
+// ---- "Decide for me": remaining macros (or default target) + profile, one tap ----
+async function decideForMe() {
+  const rem = remaining();
+  let cal, pro;
+  if (rem) { cal = rem.cal; pro = rem.pro; }
+  else { cal = profile.calTarget; pro = profile.proteinMin; }
+  if (!cal && !pro) { openSettings(); return; }
+  const q = queryFromMacros(cal, pro);
+  $("query").value = q;
+  await refresh(q);
+  document.querySelector(".resultsHead").scrollIntoView({ behavior:"smooth", block:"start" });
+}
+
+// ---- Budget UI ----
+function renderBudget() {
+  const box = $("budgetBox");
+  if (!profile.budgetCal && !profile.budgetPro) { box.style.display = "none"; return; }
+  box.style.display = "block";
+  const rem = remaining();
+  if (profile.budgetCal) {
+    $("calLeft").textContent = rem.cal + " / " + profile.budgetCal;
+    const pct = Math.min(100, (budget.eatenCal / profile.budgetCal) * 100);
+    const bar = $("calBar"); bar.classList.toggle("over", budget.eatenCal > profile.budgetCal);
+    bar.firstElementChild.style.width = pct + "%";
+  } else { $("calLeft").textContent = "—"; $("calBar").firstElementChild.style.width = "0%"; }
+  if (profile.budgetPro) {
+    $("proLeft").textContent = rem.pro + "g / " + profile.budgetPro + "g";
+    const pct = Math.min(100, (budget.eatenPro / profile.budgetPro) * 100);
+    const bar = $("proBar"); bar.classList.toggle("over", budget.eatenPro > profile.budgetPro);
+    bar.firstElementChild.style.width = pct + "%";
+  } else { $("proLeft").textContent = "—"; $("proBar").firstElementChild.style.width = "0%"; }
+  // Render today's logged meals with undo.
+  const logEl = $("mealLog");
+  if (logEl) {
+    if (!budget.log || !budget.log.length) { logEl.innerHTML = ""; }
+    else {
+      logEl.innerHTML = budget.log.slice().reverse().map(e =>
+        '<div class="logItem"><span class="li-name" title="'+esc(e.name)+'">'+esc(e.name)+'</span>'
+        + '<span class="li-macros">'+e.cal+' cal · '+e.protein+'g P</span>'
+        + '<button title="Remove" data-id="'+e.id+'">✕</button></div>'
+      ).join("");
+      logEl.querySelectorAll("button[data-id]").forEach(b => b.onclick = () => unlogMeal(b.dataset.id));
+    }
+  }
+  updateDecideSub();
+}
+
+// Render the "your go-to meals" box.
+function renderSavedMeals() {
+  const box = $("savedMealsBox");
+  if (!box) return;
+  if (!savedMeals.length) { box.style.display = "none"; box.innerHTML = ""; return; }
+  box.style.display = "block";
+  box.innerHTML = '<h3>★ Your go-to meals <span style="font-weight:400; color:#9A9382; font-size:12px">'+savedMeals.length+' saved</span></h3>'
+    + savedMeals.map(s =>
+      '<div class="sm" data-key="'+encodeURIComponent(s.key)+'">'
+      + '<div class="sm-info"><div class="sm-rest">'+esc(s.restaurant)+'</div>'
+      + '<div class="sm-meal" title="'+esc(s.label)+'">'+esc(s.label)+'</div>'
+      + '<div class="sm-macros">'+s.cal+' cal · '+s.protein+'g protein'+(s.verified?' · ✓ real':'')+'</div></div>'
+      + '<div class="sm-actions">'
+      +   '<button class="sm-eat" title="Log into today">✓ Ate</button>'
+      +   '<button class="sm-find" title="Order this">Order</button>'
+      +   '<button class="sm-del" title="Remove">✕</button>'
+      + '</div></div>'
+    ).join("");
+  box.querySelectorAll(".sm").forEach(row => {
+    const key = decodeURIComponent(row.dataset.key);
+    const s = savedMeals.find(x => x.key === key);
+    if (!s) return;
+    row.querySelector(".sm-eat").onclick = () => {
+      // log a saved meal directly
+      const pseudo = { store:{restaurant:s.restaurant}, items:[{label:s.label}], totals:{cal:s.cal,protein:s.protein,carbs:s.carbs,fat:s.fat} };
+      logMeal(pseudo);
+    };
+    row.querySelector(".sm-find").onclick = () => {
+      const url = s.discovered
+        ? "https://www.doordash.com/search/store/" + encodeURIComponent(s.restaurant) + "/"
+        : buildOrderUrl("doordash", s.restaurant);
+      window.open(url, "_blank", "noreferrer");
+    };
+    row.querySelector(".sm-del").onclick = () => {
+      const i = savedMeals.findIndex(x => x.key === key);
+      if (i >= 0) { savedMeals.splice(i,1); saveSavedList(savedMeals); renderSavedMeals(); }
+    };
+  });
+}
+function updateDecideSub() {
+  const rem = remaining();
+  if (rem) $("decideSub").textContent = "uses your " + (rem.cal!=null?rem.cal+" cal":"") + (rem.cal!=null&&rem.pro!=null?" / ":"") + (rem.pro!=null?rem.pro+"g protein":"") + " left today";
+  else if (profile.calTarget || profile.proteinMin) $("decideSub").textContent = "uses your saved target";
+  else $("decideSub").textContent = "set a target in Profile first";
+}
+
+function renderSavedAddrs() {
+  const wrap = $("savedAddrs");
+  const addrs = profile.addresses || [];
+  wrap.innerHTML = addrs.map((a,i) => '<button data-i="'+i+'">'+esc(a.label)+'</button>').join("")
+    + '<button class="add" id="manageAddr">⚙ manage</button>';
+  addrs.forEach((a,i) => {
+    const btn = wrap.querySelector('button[data-i="'+i+'"]');
+    if (btn) btn.onclick = () => { $("address").value = a.text; geocode(); };
+  });
+  const m = $("manageAddr"); if (m) m.onclick = openSettings;
+}
+
+// ---- Settings drawer ----
+function openSettings() {
+  // hydrate fields from profile
+  $("pf-cal").value = profile.calTarget || "";
+  $("pf-pro").value = profile.proteinMin || "";
+  $("pf-radius").value = profile.radius || 6;
+  $("pf-budcal").value = profile.budgetCal || "";
+  $("pf-budpro").value = profile.budgetPro || "";
+  renderDietToggles();
+  renderCuisineToggles();
+  renderAddrEditor();
+  $("overlay").classList.add("open"); $("drawer").classList.add("open");
+}
+function closeSettings() { $("overlay").classList.remove("open"); $("drawer").classList.remove("open"); }
+function renderDietToggles() {
+  const sup = (META.supportedDiets || []).map(s => s.toLowerCase());
+  $("pf-diet").innerHTML = (META.dietaryPrefs || []).map(o => {
+    const on = (profile.diet||[]).includes(o.id) ? ' on' : '';
+    const dim = sup.length && !sup.includes(o.id.toLowerCase()) ? ' style="opacity:.45"' : '';
+    return '<button class="toggle'+on+'" data-id="'+esc(o.id)+'"'+dim+' title="'+(dim?'No restaurant in your current data supports this':'')+'">'+esc(o.label)+'</button>';
+  }).join("");
+  $("pf-diet").querySelectorAll(".toggle").forEach(b => b.onclick = () => b.classList.toggle("on"));
+}
+function renderCuisineToggles() {
+  const sup = (META.supportedCuisines || []).map(s => s.toLowerCase());
+  $("pf-cuisines").innerHTML = (META.cuisines || []).map(c => {
+    const on = (profile.cuisines||[]).includes(c) ? ' on' : '';
+    const dim = sup.length && !sup.includes(c.toLowerCase()) ? ' style="opacity:.45"' : '';
+    return '<button class="toggle'+on+'" data-c="'+esc(c)+'"'+dim+'>'+esc(c)+'</button>';
+  }).join("");
+  $("pf-cuisines").querySelectorAll(".toggle").forEach(b => b.onclick = () => b.classList.toggle("on"));
+}
+let addrEdit = [];
+function renderAddrEditor() {
+  addrEdit = JSON.parse(JSON.stringify(profile.addresses || []));
+  drawAddrEditor();
+}
+function drawAddrEditor() {
+  const wrap = $("pf-addrs");
+  wrap.innerHTML = addrEdit.map((a,i) =>
+    '<div class="addr-item"><input data-k="label" data-i="'+i+'" type="text" placeholder="label (Home)" value="'+esc(a.label)+'" style="max-width:110px" />'
+    + '<input data-k="text" data-i="'+i+'" type="text" placeholder="full address" value="'+esc(a.text)+'" />'
+    + '<button class="del" data-i="'+i+'">×</button></div>').join("");
+  wrap.querySelectorAll("input").forEach(inp => inp.oninput = () => { addrEdit[inp.dataset.i][inp.dataset.k] = inp.value; });
+  wrap.querySelectorAll(".del").forEach(btn => btn.onclick = () => { addrEdit.splice(btn.dataset.i,1); drawAddrEditor(); });
+}
+function saveSettings() {
+  profile.calTarget = parseInt($("pf-cal").value) || null;
+  profile.proteinMin = parseInt($("pf-pro").value) || null;
+  profile.radius = parseInt($("pf-radius").value) || 6;
+  profile.budgetCal = parseInt($("pf-budcal").value) || null;
+  profile.budgetPro = parseInt($("pf-budpro").value) || null;
+  profile.diet = Array.from($("pf-diet").querySelectorAll(".toggle.on")).map(b => b.dataset.id);
+  profile.cuisines = Array.from($("pf-cuisines").querySelectorAll(".toggle.on")).map(b => b.dataset.c);
+  state.cuisines = profile.cuisines.slice();
+  profile.addresses = addrEdit.filter(a => a.label && a.text);
+  saveProfile(profile);
+  // apply radius immediately
+  state.radiusMi = profile.radius; $("radius").value = profile.radius; $("radiusVal").textContent = profile.radius + " mi";
+  if (radiusCircle) radiusCircle.setRadius(profile.radius*1609.34); drawCenter();
+  renderBudget(); renderSavedAddrs(); updateDecideSub();
+  closeSettings();
+  refresh();
+}
+
+// ---- Wire up ----
+$("examples").innerHTML = EXAMPLES.map(ex => '<button class="example" data-q="'+esc(ex)+'">'+esc(ex)+'</button>').join("");
+$("examples").addEventListener("click", e => { const b = e.target.closest(".example"); if (b) { $("query").value = b.dataset.q; refresh(); } });
+$("go").addEventListener("click", () => refresh());
+$("rescanBtn").addEventListener("click", () => refresh());
+$("query").addEventListener("keydown", e => { if (e.key==="Enter") refresh(); });
+$("locate").addEventListener("click", geocode);
+$("address").addEventListener("keydown", e => { if (e.key==="Enter") geocode(); });
+$("radius").addEventListener("input", () => {
+  state.radiusMi = parseInt($("radius").value,10); $("radiusVal").textContent = state.radiusMi + " mi";
+  if (radiusCircle) radiusCircle.setRadius(state.radiusMi*1609.34); refreshDebounced();
+});
+$("decideBtn").addEventListener("click", decideForMe);
+$("openSettings").addEventListener("click", openSettings);
+$("pf-close").addEventListener("click", closeSettings);
+$("overlay").addEventListener("click", closeSettings);
+$("pf-save").addEventListener("click", saveSettings);
+$("pf-addAddr").addEventListener("click", () => { const cur = $("address").value.trim(); addrEdit.push({ label:"", text:cur || "" }); drawAddrEditor(); });
+$("logBtn").addEventListener("click", () => {
+  const c = parseInt($("logCal").value) || 0, p = parseInt($("logPro").value) || 0;
+  budget.eatenCal += c; budget.eatenPro += p; saveBudget(budget);
+  $("logCal").value = ""; $("logPro").value = ""; renderBudget();
+});
+$("resetBudget").addEventListener("click", () => { budget = { date:new Date().toISOString().slice(0,10), eatenCal:0, eatenPro:0 }; saveBudget(budget); renderBudget(); });
+
+$("openNowToggle").addEventListener("click", () => {
+  state.openOnly = !state.openOnly;
+  $("openNowToggle").classList.toggle("on", state.openOnly);
+  refresh();
+});
+
+// init from profile
+if (profile.radius) { state.radiusMi = profile.radius; $("radius").value = profile.radius; $("radiusVal").textContent = profile.radius + " mi"; }
+if (profile.cuisines) state.cuisines = profile.cuisines.slice();
+renderBudget(); renderSavedAddrs(); updateDecideSub(); renderSavedMeals();
+wireFilterControls();
+// First-run explainer about verified vs estimated macros.
+try {
+  if (!localStorage.getItem(LS_SEEN_INTRO)) {
+    $("explainer").style.display = "block";
+  }
+} catch {}
+$("exClose").addEventListener("click", () => {
+  $("explainer").style.display = "none";
+  try { localStorage.setItem(LS_SEEN_INTRO, "1"); } catch {}
+});
+loadCoverage();
+window.addEventListener("load", initMap);
+</script>
+</body>
+</html>

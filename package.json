@@ -1,0 +1,15 @@
+{
+  "name": "macroeats-backend",
+  "version": "0.1.0",
+  "description": "MacroEats — combo-builder backend. Geocodes an address, finds nearby restaurants from a seed DB, assembles macro-targeted meals, returns ranked combos.",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "license": "MIT"
+}
