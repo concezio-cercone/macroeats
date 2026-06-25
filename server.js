@@ -128,6 +128,7 @@ app.get("/api/combos", async (req, res) => {
   const filter = parseQuery(q);
   filter.region = detectRegion(q, REGIONS);
   applyCourses(filter, req.query.courses);
+  applyFood(filter, req.query.food);
 
   // The seed list is empty by default — the app runs entirely on live
   // discovery. We pull real nearby places, synthesize an estimated menu for
@@ -302,6 +303,13 @@ function milesBetween(aLat, aLng, bLat, bLng) {
 function applyCourses(filter, raw) {
   const list = (raw || "").toString().split(",").map(s => s.trim()).filter(Boolean);
   if (list.length) filter.courses = [...new Set([...(filter.courses || []), ...list])];
+}
+
+// Apply an explicit food/craving keyword from the UI (?food=chicken), overriding
+// whatever the query text implied. Powers the "in the mood for" category chips.
+function applyFood(filter, raw) {
+  const s = (raw || "").toString().trim().toLowerCase();
+  if (s) filter.food = s;
 }
 
 // normalize names for matching ("Chipotle Mexican Grill" -> "chipotle")
@@ -524,6 +532,7 @@ app.get("/api/store-meals", (req, res) => {
   const filter = parseQuery(q);
   filter.region = detectRegion(q, REGIONS);
   applyCourses(filter, req.query.courses);
+  applyFood(filter, req.query.food);
 
   const meals = buildStoreVariants(store, { lat, lng }, filter, { now, subText: sub, limit: 14 });
   res.json({ restaurant: name, sub, count: meals.length, meals });

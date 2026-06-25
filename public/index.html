@@ -139,6 +139,11 @@
   .opt-radius { flex:1; min-width:220px; }
   .panel-actions { display:flex; gap:10px; margin-top:18px; padding-top:18px; border-top:1px solid var(--line); flex-wrap:wrap; }
   .panel-hint { font-size:12px; color:var(--text-faint); text-align:center; margin-top:10px; }
+  .moodLabel { font-size:12px; color:var(--text-faint); margin:16px 0 0; }
+  .moods { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .mood { display:inline-flex; align-items:center; gap:6px; padding:8px 13px; font-size:13px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--text); cursor:pointer; font-family:inherit; }
+  .mood:hover { border-color:var(--line-strong); }
+  .mood.on { background:var(--accent); color:var(--on-accent); border-color:var(--accent); font-weight:600; }
   .cta { flex:1 1 200px; padding:15px 18px; font-size:15px; font-weight:700; font-family:inherit; border-radius:13px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; }
   .cta:active { transform:translateY(1px); }
   .cta-primary { flex-grow:2; background:var(--accent); color:var(--on-accent); }
@@ -325,6 +330,8 @@
         <input id="query" placeholder="e.g. 800 cal, 60g protein  —  or  —  800 cal sandwich" value="800 cal, 60g protein" aria-label="Macro target" />
       </div>
       <div class="examples" id="examples"></div>
+      <div class="moodLabel">In the mood for something? (optional — tap to filter)</div>
+      <div class="moods" id="moods"></div>
     </div>
 
     <div class="panel-section">
@@ -483,7 +490,30 @@ const PLATFORM_META = { doordash:{label:"DoorDash",color:"#EB1700"}, ubereats:{l
 const EXAMPLES = ["800 cal, 60g protein","1500 cal, meal and dessert","high protein under 700 cal","low carb, 50g protein","just a treat under 400 cal"];
 // Full preference taxonomy is loaded from /api/meta at startup.
 let META = { dietaryPrefs: [], cuisines: [], supportedCuisines: [], supportedDiets: [] };
-const state = { center:{ lat:34.0522, lng:-118.4100 }, radiusMi:6, openOnly:false, cuisines:[], dessertMode:"meal" };
+const state = { center:{ lat:34.0522, lng:-118.4100 }, radiusMi:6, openOnly:false, cuisines:[], dessertMode:"meal", mood:null };
+// "In the mood for" quick-filters — each maps to the food keyword the engine
+// matches against the main dish + chain cuisine/region.
+//   g:1  -> also show estimated (discovered) places, since most world cuisines
+//           live there, not in the verified chains. (Still labeled *.)
+//   d:1  -> a treat: switch to dessert mode so it can surface.
+const MOODS = [
+  // --- food types (plenty of verified chains) ---
+  {e:"🍗",l:"Chicken",f:"chicken"},{e:"🍔",l:"Burger",f:"burger"},{e:"🍕",l:"Pizza",f:"pizza"},
+  {e:"🥪",l:"Sandwich",f:"sandwich"},{e:"🥗",l:"Salad",f:"salad"},{e:"🍲",l:"Soup",f:"soup"},
+  {e:"🔥",l:"Wings",f:"wings"},{e:"🌮",l:"Tacos",f:"taco"},{e:"🌯",l:"Burrito",f:"burrito"},
+  {e:"🥣",l:"Bowl",f:"bowl"},{e:"🍝",l:"Pasta",f:"pasta"},{e:"🦐",l:"Seafood",f:"seafood"},
+  {e:"🍖",l:"BBQ",f:"bbq"},{e:"🍳",l:"Breakfast",f:"breakfast"},
+  // --- cuisines (often discovered spots — reveal estimates too) ---
+  {e:"🫔",l:"Mexican",f:"mexican",g:1},{e:"🍅",l:"Italian",f:"italian",g:1},
+  {e:"🥡",l:"Chinese",f:"chinese",g:1},{e:"🍱",l:"Japanese",f:"japanese",g:1},
+  {e:"🍣",l:"Sushi",f:"sushi",g:1},{e:"🍜",l:"Thai",f:"thai",g:1},
+  {e:"🥘",l:"Korean",f:"korean",g:1},{e:"🍛",l:"Indian",f:"indian",g:1},
+  {e:"🥖",l:"Vietnamese",f:"vietnamese",g:1},{e:"🥙",l:"Mediterranean",f:"mediterranean",g:1},
+  {e:"🫒",l:"Greek",f:"greek",g:1},
+  // --- treats ---
+  {e:"🥤",l:"Smoothie",f:"smoothie",g:1},{e:"🍦",l:"Ice cream",f:"ice cream",g:1,d:1},
+  {e:"🍩",l:"Donut",f:"donut",g:1,d:1}
+];
 // Map the dessert switch to the API's ?courses param. "" = normal (dessert optional).
 function dessertCourses() {
   return state.dessertMode === "dessert" ? "dessert"
@@ -665,6 +695,7 @@ async function fetchCombos(overrideQuery, discoverOverride) {
   if (state.cuisines.length) params.set("cuisines", state.cuisines.join(","));
   if (dietTags.length) params.set("diets", dietTags.join(","));
   if (dessertCourses()) params.set("courses", dessertCourses());
+  if (state.mood) params.set("food", state.mood);
   const r = await fetch("/api/combos?" + params.toString());
   if (!r.ok) throw new Error("combos " + r.status);
   return r.json();
@@ -952,6 +983,7 @@ async function fetchStoreMeals(store, sub) {
   if (store.cuisines && store.cuisines.length) params.set("cuisine", store.cuisines.join(";"));
   if (sub) params.set("sub", sub);
   if (dessertCourses()) params.set("courses", dessertCourses());
+  if (state.mood) params.set("food", state.mood);
   const r = await fetch("/api/store-meals?" + params.toString());
   if (!r.ok) throw new Error("store-meals " + r.status);
   return r.json();
@@ -1358,6 +1390,16 @@ function saveSettings() {
 // ---- Wire up ----
 $("examples").innerHTML = EXAMPLES.map(ex => '<button class="example" data-q="'+esc(ex)+'">'+esc(ex)+'</button>').join("");
 $("examples").addEventListener("click", e => { const b = e.target.closest(".example"); if (b) { $("query").value = b.dataset.q; refresh(); } });
+function renderMoods() {
+  $("moods").innerHTML = MOODS.map(m => '<button class="mood'+(state.mood===m.f?' on':'')+'" data-food="'+m.f+'">'+m.e+' '+esc(m.l)+'</button>').join("");
+}
+renderMoods();
+$("moods").addEventListener("click", e => {
+  const b = e.target.closest(".mood"); if (!b) return;
+  state.mood = (state.mood === b.dataset.food) ? null : b.dataset.food;  // tap again to clear
+  renderMoods();
+  refresh();
+});
 $("go").addEventListener("click", () => refresh());
 $("query").addEventListener("keydown", e => { if (e.key==="Enter") refresh(); });
 $("locate").addEventListener("click", geocode);
