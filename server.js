@@ -18,6 +18,7 @@ const path = require("path");
 const { parseQuery, detectRegion, buildCombos, buildStoreVariants, isOpenAt } = require("./lib/comboEngine");
 const { synthStore } = require("./lib/estimator");
 const { chainStoreFor } = require("./lib/chains");
+const { menuStatStoreFor, mergeInto, stats: menuStatStats } = require("./lib/menuStat");
 const { learnedStoreFor, saveLearned, listLearned, removeLearned } = require("./lib/learnedStore");
 
 const app = express();
@@ -47,6 +48,7 @@ app.get("/api/health", (req, res) => {
     verifiedItems: verified,
     verifiedPct: items.length ? Math.round((verified / items.length) * 100) : 0,
     regions: REGIONS,
+    menuStat: menuStatStats(),   // verified-macro chains imported from MenuStat
   });
 });
 
@@ -151,21 +153,29 @@ app.get("/api/combos", async (req, res) => {
       discovery.afterCollapse = places.length;
 
       const synth = [];
-      let discarded = 0, chainMatched = 0, learnedMatched = 0;
+      let discarded = 0, chainMatched = 0, learnedMatched = 0, menuStatMatched = 0;
       // For each nearby place, resolve macros in priority order:
       //   1. learned store (persistent, grows over time) — pulled from disk
-      //   2. built-in verified chain map
-      //   3. cuisine estimate (discard if no real signal)
-      // So a restaurant we've already learned never gets looked up again.
+      //   2. curated verified chain map (lib/chains.js — rich modifiers + prices)
+      //   3. MenuStat verified macros (~60 chains, official published nutrition)
+      //   4. cuisine estimate (discard if no real signal)
+      // So a restaurant we've already learned never gets looked up again. When a
+      // place is in BOTH curated and MenuStat, curated wins and MenuStat's items
+      // are merged in for extra breadth.
       for (const p of places) {
         if (dbNames.has(normName(p.name))) continue;     // verified DB handles these
         const learned = learnedStoreFor(p.name, p);      // 1. persistent local data
         if (learned) { synth.push(learned); learnedMatched++; }
         else {
-          const chain = chainStoreFor(p.name, p);        // 2. built-in chain map
-          if (chain) { synth.push(chain); chainMatched++; }
-          else {
-            const s = synthStore(p);                     // 3. cuisine estimate
+          const chain = chainStoreFor(p.name, p);        // 2. curated chain map
+          const ms = menuStatStoreFor(p.name, p);        // 3. MenuStat verified macros
+          if (chain) {
+            if (ms) mergeInto(chain, ms);                //    same place in both -> keep curated, add breadth
+            synth.push(chain); chainMatched++;
+          } else if (ms) {
+            synth.push(ms); menuStatMatched++;
+          } else {
+            const s = synthStore(p);                     // 4. cuisine estimate
             if (s.lowConfidence) { discarded++; continue; }
             synth.push(s);
           }
@@ -175,6 +185,7 @@ app.get("/api/combos", async (req, res) => {
       discovery.usable = synth.length;
       discovery.discarded = discarded;
       discovery.chainMatched = chainMatched;
+      discovery.menuStatMatched = menuStatMatched;
       discovery.learnedMatched = learnedMatched;
       restaurants = RESTAURANTS.concat(synth);
     } catch (e) {
@@ -471,11 +482,18 @@ app.get("/api/store-meals", (req, res) => {
 
   if (!name || Number.isNaN(lat) || Number.isNaN(lng)) return res.status(400).json({ error: "name, lat, lng required" });
 
-  // Resolve the store: verified DB → learned store → built-in chains → estimate.
+  // Resolve the store: verified DB → learned → curated chains (+MenuStat breadth)
+  //  → MenuStat → estimate. Mirrors the priority in /api/combos.
   let store = RESTAURANTS.find(s => normName(s.restaurant) === normName(name));
   if (!store) {
     const loc = { name, lat: Number.isNaN(slat) ? lat : slat, lng: Number.isNaN(slng) ? lng : slng, cuisine, amenity };
-    store = learnedStoreFor(name, loc) || chainStoreFor(name, loc) || synthStore(loc);
+    store = learnedStoreFor(name, loc);
+    if (!store) {
+      const chain = chainStoreFor(name, loc);
+      const ms = menuStatStoreFor(name, loc);
+      if (chain) store = ms ? mergeInto(chain, ms) : chain;
+      else store = ms || synthStore(loc);
+    }
   }
 
   const filter = parseQuery(q);
@@ -515,8 +533,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.listen(PORT, () => {
   const items = RESTAURANTS.flatMap(r => r.items);
   const verified = items.filter(i => i.verified).length;
+  const ms = menuStatStats();
   console.log("MacroEats backend running:  http://localhost:" + PORT);
   console.log("  restaurants: " + RESTAURANTS.length + " | items: " + items.length +
     " | verified macros: " + verified + "/" + items.length);
+  console.log("  MenuStat verified chains: " + ms.chains + " | items: " + ms.items);
   console.log("  endpoints: /api/combos  /api/geocode  /api/health");
 });

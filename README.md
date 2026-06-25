@@ -22,7 +22,8 @@ Then open **http://localhost:3000**, set your address, and search.
 1. **Discovery** — finds real restaurants near your address from OpenStreetMap (free, no key).
 2. **Macros** — resolved in priority order for each restaurant:
    - **Your saved corrections** (the learned store) — anything you've fixed before, reused forever.
-   - **Built-in verified chains** — ~13 chains (Chipotle, Chick-fil-A, Taco Bell, In-N-Out…) with real published macros.
+   - **Curated chains** — a small hand-built set (Chipotle, Chick-fil-A, Taco Bell, In-N-Out…) with real published macros *and* rich modifiers ("no rice, double chicken") and prices.
+   - **MenuStat chains** — ~60 more national chains (Pizza Hut–style data excluded for quality; includes Domino's, Golden Corral, Applebee's, Arby's, KFC, Burger King, Chili's, Dairy Queen…) with official published per-item macros, imported from the public [MenuStat](https://www.menustat.org) dataset. Macros are real (`✓`); prices are estimates. Where a place is in both, the curated entry wins and MenuStat items are merged in for extra breadth.
    - **Cuisine estimate** — for everything else, an educated guess from the cuisine type, clearly flagged as an estimate.
 3. **Meal building** — items have a `base` plus toggleable `modifiers` (no rice, double protein, no cheese, add guac…), each with macro/price deltas. The engine *constructs* the variant that best hits your target rather than accepting or rejecting fixed presets.
 4. **Ranking** — open-now first, verified macros ahead of estimates, then best fit to your target.
@@ -49,7 +50,11 @@ The macro data is the only real limitation, and it's designed to improve with us
 
 ## The honest limitation
 
-Discovery and opening hours come from volunteer-mapped OpenStreetMap data, so coverage varies by area and hours are often missing. There's no free source that has both "restaurants near me" *and* "their macros" — hence the estimate-and-correct design. If you want substantially better discovery and real hours, a free [Foursquare](https://location.foursquare.com/developer/) key (no credit card) or a Google Places key (card on file, but free in practice for personal use) is the upgrade path; the app already has a dormant Places scaffold (`/api/place-status`).
+**Discovery** and opening hours come from volunteer-mapped OpenStreetMap data, so coverage varies by area and hours are often missing. **Macros** are now real for the ~60 national chains in the MenuStat import plus the curated set; everything else is a cuisine-based estimate (clearly flagged) until you correct it. So the gap that remains is the long tail of *local, non-chain* restaurants — there's no free source with their macros, hence the estimate-and-correct design.
+
+A note on the MenuStat data: it's the chains' own published figures, but it's a third-party annual snapshot, so a chain may have changed its menu since, and **prices are estimated** (MenuStat carries no prices). One chain (Pizza Hut) was dropped at build time because its protein values were systematically wrong — see `build_menustat.py`. If you spot a bad number, **✏️ Fix macros** overrides it forever.
+
+If you want substantially better discovery and real hours, a free [Foursquare](https://location.foursquare.com/developer/) key (no credit card) or a Google Places key (card on file, but free in practice for personal use) is the upgrade path; the app already has a dormant Places scaffold (`/api/place-status`).
 
 ## Project layout
 
@@ -59,15 +64,24 @@ macroeats-backend/
 ├── lib/
 │   ├── comboEngine.js       parser, meal builder, scoring, open-hours (pure, reusable)
 │   ├── estimator.js         cuisine-based macro estimates for discovered places
-│   ├── chains.js            verified published macros for known chains
+│   ├── chains.js            curated verified chains (rich modifiers + prices)
+│   ├── menuStat.js          loader for the ~60 MenuStat verified chains
 │   └── learnedStore.js      persistent store of your saved corrections
 ├── data/
 │   ├── restaurants.json     seed DB (empty by default — app runs on live discovery)
+│   ├── menustat-chains.json generated verified-macro DB (built by build_menustat.py)
 │   └── learned-chains.json  your saved macro corrections (git-ignored by default)
+├── build_menustat.py        converts the MenuStat dataset → data/menustat-chains.json
+├── nutrition-data/
+│   └── menustat-2022.xlsx   MenuStat source data (NYC DOHMH public dataset)
 ├── public/
 │   └── index.html           frontend (calls the API)
 └── package.json
 ```
+
+To rebuild the MenuStat database (e.g. after dropping in a newer annual file):
+`pip install openpyxl && python build_menustat.py`. It re-derives everything,
+including the per-chain protein sanity check that drops unreliable chains.
 
 ## API
 
