@@ -266,6 +266,14 @@ def main():
         seen.add(dedup)
         base = {"cal": round(cal), "protein": round(pro),
                 "carbs": round(carb), "fat": round(fat)}
+        # Extra per-serving nutrients for optional visuals (MenuStat values are
+        # already per item as served, so no conversion). No allergen data here.
+        def mg(key):
+            v = cell(r, key)
+            return round(v) if isnum(v) else None
+        micros = {"sodium": mg("sodium"), "fiber": mg("dietary_fiber"),
+                  "sugar": mg("sugar"), "addedSugar": None,
+                  "satFat": mg("saturated_fat")}
         mods, price = modifiers_and_price(name, base, PRICE[cat])
         item = {
             "name": name,
@@ -275,6 +283,7 @@ def main():
             "price": price,
             "base": base,
             "modifiers": mods,
+            "micros": micros,
             "_cat": cat,
         }
         by_chain.setdefault(rest, []).append(item)
@@ -320,6 +329,7 @@ def main():
                 "price": i["price"],
                 "base": i["base"],
                 "modifiers": i["modifiers"],
+                "micros": i["micros"],
                 "source": src,
             })
         total_items += len(out_items)

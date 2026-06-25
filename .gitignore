@@ -20,3 +20,8 @@ data/restaurants.seed-backup.json
 # Your learned macros are LOCAL and personal — keep them out of the public repo.
 # (Comment this line out if you WANT to version your learned-chains data.)
 data/learned-chains.json
+
+# OpenNutrition full-dataset working copy (~11 MB, ODbL). Re-created by
+# `npm run refresh-data` / build_opennutrition.py — only the compact derived
+# data/opennutrition-chains.json is committed.
+nutrition-data/opennutrition-restaurant.tsv
