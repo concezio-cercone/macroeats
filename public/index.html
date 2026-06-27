@@ -111,7 +111,9 @@
   :root:not([data-theme="light"]) .leaflet-control-attribution { background:rgba(20,17,12,.7) !important; }
   :root:not([data-theme="light"]) .leaflet-control-attribution, :root:not([data-theme="light"]) .leaflet-control-attribution a { color:var(--text-faint) !important; }
   :root:not([data-theme="light"]) .leaflet-bar a { background:var(--surface); color:var(--text); border-bottom-color:var(--line); }
-  .mapHint { position:absolute; z-index:500; top:10px; left:10px; right:10px; pointer-events:none; font-size:13px; color:var(--text-muted); background:var(--surface); border:1px solid var(--line); padding:8px 12px; border-radius:8px; }
+  .mapHint { position:absolute; z-index:500; top:10px; left:54px; right:10px; pointer-events:none; font-size:13px; color:var(--text-muted); background:var(--surface); border:1px solid var(--line); padding:8px 12px; border-radius:8px; }
+  .mapToggle { width:100%; padding:11px 14px; font-size:13px; font-weight:600; font-family:inherit; color:var(--text-muted); background:var(--surface); border:1.5px dashed var(--line-strong); border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .mapToggle:hover { color:var(--text); border-color:var(--text-faint); }
 
   .radiusBar { display:flex; align-items:center; gap:12px; margin-bottom:14px; padding:12px 14px; background:var(--surface); border:1px solid var(--line); border-radius:12px; flex-wrap:wrap; }
   .radiusBar label { font-size:13px; font-weight:600; white-space:nowrap; }
@@ -137,20 +139,21 @@
   .opt { display:flex; align-items:center; gap:10px; }
   .opt > label { font-size:13px; font-weight:600; color:var(--text-muted); white-space:nowrap; }
   .opt-radius { flex:1; min-width:220px; }
-  .panel-actions { display:flex; gap:10px; margin-top:18px; padding-top:18px; border-top:1px solid var(--line); flex-wrap:wrap; }
+  .panel-actions { display:flex; flex-direction:column; align-items:stretch; gap:10px; margin-top:18px; padding-top:18px; border-top:1px solid var(--line); }
   .panel-hint { font-size:12px; color:var(--text-faint); text-align:center; margin-top:10px; }
   .moodLabel { font-size:12px; color:var(--text-faint); margin:16px 0 0; }
   .moods { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
   .mood { display:inline-flex; align-items:center; gap:6px; padding:8px 13px; font-size:13px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--text); cursor:pointer; font-family:inherit; }
   .mood:hover { border-color:var(--line-strong); }
   .mood.on { background:var(--accent); color:var(--on-accent); border-color:var(--accent); font-weight:600; }
-  .cta { flex:1 1 200px; padding:15px 18px; font-size:15px; font-weight:700; font-family:inherit; border-radius:13px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; }
+  .cta { padding:15px 18px; font-size:15px; font-weight:700; font-family:inherit; border-radius:13px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; }
   .cta:active { transform:translateY(1px); }
-  .cta-primary { flex-grow:2; background:var(--accent); color:var(--on-accent); }
+  .cta-primary { width:100%; background:var(--accent); color:var(--on-accent); }
   .cta-primary:hover { filter:brightness(1.05); }
-  .cta-secondary { background:var(--surface); color:var(--text); border:1.5px solid var(--line-strong); flex-wrap:wrap; }
-  .cta-secondary:hover { background:var(--surface-2); }
-  .cta-secondary small { font-weight:500; font-size:11.5px; color:var(--text-faint); flex-basis:100%; text-align:center; }
+  .cta-secondary { align-self:center; flex-direction:column; gap:1px; background:none; color:var(--text-muted); border:none; font-size:13.5px; font-weight:700; padding:6px 12px; }
+  .cta-secondary:hover { color:var(--text); }
+  .cta-secondary .ctaMain { border-bottom:1px solid var(--line-strong); padding-bottom:1px; }
+  .cta-secondary small { font-weight:500; font-size:11.5px; color:var(--text-faint); }
   .examples { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
   .example { padding:7px 13px; font-size:13px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--text-muted); cursor:pointer; font-family:inherit; }
   .example:hover { border-color:var(--line-strong); color:var(--text); }
@@ -232,6 +235,7 @@
   .cardFoot { display:flex; align-items:center; justify-content:space-between; gap:12px; }
   .price { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; }
   .order { display:inline-block; padding:10px 16px; font-size:14px; font-weight:700; color:#fff; border-radius:10px; text-decoration:none; }
+  .orderGroup { display:flex; gap:8px; flex-wrap:wrap; }
 
   .est-star { color:var(--warn); font-weight:700; cursor:help; position:relative; margin-left:1px; }
   .est-star .tip { visibility:hidden; opacity:0; transition:opacity .12s ease; position:absolute; bottom:140%; right:0; left:auto; transform:none; width:min(290px,80vw); white-space:normal; overflow-wrap:anywhere; background:#16140F; color:#FBF7EF; text-align:left; font-family:'DM Sans',sans-serif; font-weight:400; font-size:12.5px; line-height:1.45; padding:10px 12px; border-radius:10px; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,.22); pointer-events:none; }
@@ -266,10 +270,14 @@
   footer { margin-top:32px; font-size:12.5px; color:var(--text-faint); line-height:1.5; text-align:center; }
   footer code { background:var(--surface-2); padding:1px 5px; border-radius:4px; }
   @keyframes rise { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
-  .explainer { position:relative; background:var(--warn-bg); border:1.5px solid var(--warn); border-radius:14px; padding:16px 40px 16px 16px; margin-bottom:16px; }
-  .explainer .exClose { position:absolute; top:10px; right:12px; background:none; border:none; font-size:16px; color:var(--text-faint); cursor:pointer; line-height:1; }
-  .explainer .exTitle { font-size:13px; font-weight:800; color:var(--warn-text); margin-bottom:6px; }
-  .explainer .exBody { font-size:13px; line-height:1.55; color:var(--text-muted); }
+  .explainer { position:relative; background:var(--warn-bg); border:1.5px solid var(--warn); border-radius:12px; padding:2px 36px 2px 4px; margin-bottom:14px; }
+  .explainer .exClose { position:absolute; top:9px; right:11px; background:none; border:none; font-size:15px; color:var(--text-faint); cursor:pointer; line-height:1; z-index:1; }
+  .exToggle { display:flex; align-items:center; gap:10px; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:inherit; padding:9px 8px; }
+  .exToggle .exTitle { font-size:13px; font-weight:800; color:var(--warn-text); }
+  .exToggle .exTease { font-size:12px; font-weight:500; color:var(--text-muted); }
+  .exToggle .exCaret { margin-left:auto; color:var(--text-faint); font-size:10px; transition:transform .15s ease; }
+  .exToggle[aria-expanded="true"] .exCaret { transform:rotate(180deg); }
+  .explainer .exBody { font-size:13px; line-height:1.55; color:var(--text-muted); padding:0 8px 12px; }
   /* macro split ring + extra-nutrient + allergen visuals (optional, data-driven) */
   .macroSplit { display:flex; align-items:center; gap:12px; margin-top:12px; }
   .macroSplit svg { flex:none; }
@@ -282,6 +290,20 @@
   .allerg .chip { padding:2px 8px; border-radius:999px; border:1px solid var(--line); }
   .allerg .free { background:var(--ok-bg); color:var(--ok-text); border-color:var(--ok); }
   .allerg .has  { background:var(--danger-bg); color:var(--danger-text); border-color:var(--danger); }
+  /* mood "show more" + results-count detail */
+  .mood-extra { display:none; }
+  .moods.expanded .mood-extra { display:inline-flex; }
+  .moodMore { display:inline-flex; align-items:center; gap:6px; padding:8px 13px; font-size:13px; border:1px dashed var(--line-strong); border-radius:999px; background:none; color:var(--text-muted); cursor:pointer; font-family:inherit; font-weight:600; }
+  .moodMore:hover { color:var(--text); border-color:var(--text-faint); }
+  .countMain { font-weight:700; }
+  .countMore { font-weight:500; font-size:12px; color:var(--text-faint); cursor:help; border-bottom:1px dotted var(--text-faint); margin-left:8px; }
+  @media (max-width:480px) {
+    body { padding:18px 12px; }
+    .locationBar { flex-wrap:wrap; }
+    #address { flex:1 1 auto; }
+    #locate { flex:1 1 100%; order:3; }
+    .drawer { width:100vw; }
+  }
 </style>
 </head>
 <body>
@@ -301,9 +323,13 @@
   <div class="coverage" id="coverage">Connecting to backend…</div>
 
   <div class="explainer" id="explainer" style="display:none">
-    <button class="exClose" id="exClose" title="Got it">✕</button>
-    <div class="exTitle">How the macros work — read this once</div>
-    <div class="exBody">
+    <button class="exClose" id="exClose" title="Dismiss">✕</button>
+    <button class="exToggle" id="exToggle" type="button" aria-expanded="false" aria-controls="exBody">
+      <span class="exTitle">How macros work</span>
+      <span class="exTease">✓ verified vs <code>*</code> estimated</span>
+      <span class="exCaret">▼</span>
+    </button>
+    <div class="exBody" id="exBody" hidden>
       Some restaurants have <b>✓ real macros</b> (verified from the chain's official nutrition).
       Most discovered places show <b>* estimated macros</b> — educated guesses from the cuisine type, <i>not</i> from that specific restaurant. Estimates can be off, so treat them as ballpark.
       When you know the real numbers, hit <b>✏️ Fix macros</b> on any meal — it saves them permanently and every future search uses them. The tool gets more accurate the more you use it.
@@ -312,21 +338,22 @@
 
   <div class="panel">
     <div class="panel-section">
-      <div class="panel-label"><span class="step">1</span> Where to deliver</div>
+      <div class="panel-label">Where to deliver</div>
       <div class="savedAddrs" id="savedAddrs"></div>
       <div class="locationBar">
         <span class="pin">📍</span>
-        <input id="address" placeholder="Delivery address — e.g. 123 Main St, Los Angeles, CA 90012" aria-label="Delivery address" />
+        <input id="address" placeholder="Delivery address — street, city, ZIP" aria-label="Delivery address" />
         <button id="locate">Set location</button>
       </div>
-      <div class="mapWrap">
+      <button type="button" class="mapToggle" id="mapToggle" aria-expanded="false" aria-controls="mapWrap">🗺️ Show map to drop a pin</button>
+      <div class="mapWrap" id="mapWrap" hidden style="margin-top:10px">
         <div id="map"></div>
-        <div class="mapHint" id="mapHint">Enter an address and tap Set location, or click the map to drop your spot.</div>
+        <div class="mapHint" id="mapHint">Click the map to drop your spot, or type an address above.</div>
       </div>
     </div>
 
     <div class="panel-section">
-      <div class="panel-label"><span class="step">2</span> What you're after</div>
+      <div class="panel-label">What you're after</div>
       <div class="searchWrap">
         <input id="query" placeholder="e.g. 800 cal, 60g protein  —  or  —  800 cal sandwich" value="800 cal, 60g protein" aria-label="Macro target" />
       </div>
@@ -336,7 +363,7 @@
     </div>
 
     <div class="panel-section">
-      <div class="panel-label"><span class="step">3</span> Options</div>
+      <div class="panel-label">Options</div>
       <div class="optionsRow">
         <div class="opt opt-radius">
           <label for="radius">Radius</label>
@@ -357,7 +384,7 @@
 
     <div class="panel-actions">
       <button id="go" class="cta cta-primary">🔍 Find meals near me</button>
-      <button id="decideBtn" class="cta cta-secondary">🎲 Decide for me<small id="decideSub"></small></button>
+      <button id="decideBtn" class="cta cta-secondary">🎲 <span class="ctaMain">Decide for me</span><small id="decideSub"></small></button>
     </div>
     <div class="panel-hint">Searches real restaurants near your address and builds meals to your target.</div>
   </div>
@@ -667,7 +694,7 @@ function fitToRadius() { if (radiusCircle) map.fitBounds(radiusCircle.getBounds(
 async function loadCoverage() {
   try {
     const h = await (await fetch("/api/health")).json();
-    $("coverage").innerHTML = "Backend connected · restaurants are discovered live near your address. Macros are estimated from cuisine — verify before relying on them.";
+    $("coverage").innerHTML = "Restaurants are discovered live near your address.";
   } catch { $("coverage").innerHTML = "⚠ Backend not reachable. Start it with <b>start.bat</b> and reload."; }
   try { META = await (await fetch("/api/meta")).json(); } catch {}
 }
@@ -815,7 +842,7 @@ function renderData(payload) {
     } else {
       why = 'No meals matched. Widen the radius, loosen the macros, or move your pin.';
     }
-    $("count").textContent = (disc.usable ? disc.usable + " usable nearby · " : "") + "0 meals";
+    $("count").textContent = "0 meals near you";
     out.innerHTML = '<div class="empty">' + why + '</div>';
     return;
   }
@@ -823,15 +850,16 @@ function renderData(payload) {
   $("filterBar").style.display = "flex";
   const shown = applyFiltersAndSort(combos);
 
-  let countMsg = shown.length + " meal" + (shown.length===1?"":"s");
-  if (shown.length !== combos.length) countMsg += " (of " + combos.length + ")";
-  if (disc.usable) countMsg += " · " + disc.usable + " nearby restaurants";
+  const filteredNote = (shown.length !== combos.length) ? " (of " + combos.length + ")" : "";
+  const det = [];
+  if (disc.usable) det.push(disc.usable + " restaurants searched nearby");
   if (disc.collapsedFrom && disc.afterCollapse && disc.collapsedFrom > disc.afterCollapse)
-    countMsg += " · " + (disc.collapsedFrom - disc.afterCollapse) + " duplicate locations merged";
-  if (disc.chainMatched) countMsg += " · " + disc.chainMatched + " with ✓ real macros";
-  if (disc.discarded) countMsg += " · " + disc.discarded + " skipped (no macro data)";
-  if (disc.error) countMsg += " · ⚠ discovery error";
-  $("count").textContent = countMsg;
+    det.push((disc.collapsedFrom - disc.afterCollapse) + " duplicate locations merged");
+  if (disc.chainMatched) det.push(disc.chainMatched + " with verified macros");
+  if (disc.discarded) det.push(disc.discarded + " skipped (no macro data)");
+  if (disc.error) det.push("discovery error");
+  $("count").innerHTML = '<span class="countMain">' + shown.length + " meal" + (shown.length===1?"":"s") + filteredNote + '</span> near you'
+    + (det.length ? ' <span class="countMore" tabindex="0" title="' + det.join(" · ") + '">how we got this</span>' : "");
   $("sortNote").textContent = ({fit:"ranked by fit","real-first":"verified macros first",volume:"most food by weight",protein:"most protein first","protein-density":"most protein per calorie","protein-value":"most protein per $",distance:"closest first","cal-asc":"fewest calories first","cal-desc":"most calories first","cal-value":"most calories per $",price:"cheapest first"})[filterState.sortBy] || "";
 
   if (!shown.length) {
@@ -919,8 +947,8 @@ function cardInner(c, f) {
 
   let footLinks;
   if (c.store.discovered) {
-    footLinks = '<a class="order" href="https://www.doordash.com/search/store/'+encodeURIComponent(c.store.restaurant)+'/" target="_blank" rel="noreferrer" style="background:#EB1700; flex:1; text-align:center; font-size:13px">Find on DoorDash →</a>'
-      + '<a class="order" href="https://www.ubereats.com/search?q='+encodeURIComponent(c.store.restaurant)+'" target="_blank" rel="noreferrer" style="background:#06C167; flex:1; text-align:center; font-size:13px">Find on Uber Eats →</a>';
+    footLinks = '<span class="orderGroup"><a class="order" href="https://www.doordash.com/search/store/'+encodeURIComponent(c.store.restaurant)+'/" target="_blank" rel="noreferrer" style="background:#EB1700; font-size:12.5px; padding:8px 12px">DoorDash →</a>'
+      + '<a class="order" href="https://www.ubereats.com/search?q='+encodeURIComponent(c.store.restaurant)+'" target="_blank" rel="noreferrer" style="background:#06C167; font-size:12.5px; padding:8px 12px">Uber Eats →</a></span>';
   } else {
     const orderUrl = buildOrderUrl(c.store.platform, c.store.restaurant);
     footLinks = '<a class="order" href="'+esc(orderUrl)+'" target="_blank" rel="noreferrer" style="background:'+p.color+'">Order on '+p.label+' →</a>';
@@ -1397,11 +1425,18 @@ function saveSettings() {
 // ---- Wire up ----
 $("examples").innerHTML = EXAMPLES.map(ex => '<button class="example" data-q="'+esc(ex)+'">'+esc(ex)+'</button>').join("");
 $("examples").addEventListener("click", e => { const b = e.target.closest(".example"); if (b) { $("query").value = b.dataset.q; refresh(); } });
+let moodsExpanded = false;
+const MOOD_VISIBLE = 8;   // show food-type chips; tuck cuisines/treats behind "more"
 function renderMoods() {
-  $("moods").innerHTML = MOODS.map(m => '<button class="mood'+(state.mood===m.f?' on':'')+'" data-food="'+m.f+'">'+m.e+' '+esc(m.l)+'</button>').join("");
+  const selIdx = MOODS.findIndex(m => m.f === state.mood);
+  const expanded = moodsExpanded || selIdx >= MOOD_VISIBLE;   // never hide the active chip
+  $("moods").className = "moods" + (expanded ? " expanded" : "");
+  $("moods").innerHTML = MOODS.map((m,i) => '<button class="mood'+(i>=MOOD_VISIBLE?' mood-extra':'')+(state.mood===m.f?' on':'')+'" data-food="'+m.f+'">'+m.e+' '+esc(m.l)+'</button>').join("")
+    + '<button type="button" class="moodMore" id="moodMore">'+(expanded ? '– less' : '+ '+(MOODS.length-MOOD_VISIBLE)+' more')+'</button>';
 }
 renderMoods();
 $("moods").addEventListener("click", e => {
+  if (e.target.closest("#moodMore")) { moodsExpanded = !moodsExpanded; renderMoods(); return; }
   const b = e.target.closest(".mood"); if (!b) return;
   const food = b.dataset.food;
   if (state.mood === food) {                          // tap the active one -> clear
@@ -1417,6 +1452,11 @@ $("moods").addEventListener("click", e => {
   }
   renderMoods();
   refresh();
+});
+$("mapToggle").addEventListener("click", () => {
+  const w = $("mapWrap"), open = !w.hasAttribute("hidden");
+  if (open) { w.setAttribute("hidden", ""); $("mapToggle").setAttribute("aria-expanded", "false"); $("mapToggle").textContent = "🗺️ Show map to drop a pin"; }
+  else { w.removeAttribute("hidden"); $("mapToggle").setAttribute("aria-expanded", "true"); $("mapToggle").textContent = "🗺️ Hide map"; if (map) { map.invalidateSize(); fitToRadius(); } }
 });
 $("go").addEventListener("click", () => refresh());
 $("query").addEventListener("keydown", e => { if (e.key==="Enter") refresh(); });
@@ -1475,6 +1515,11 @@ try {
 $("exClose").addEventListener("click", () => {
   $("explainer").style.display = "none";
   try { localStorage.setItem(LS_SEEN_INTRO, "1"); } catch {}
+});
+$("exToggle").addEventListener("click", () => {
+  const open = !$("exBody").hasAttribute("hidden");
+  if (open) { $("exBody").setAttribute("hidden", ""); $("exToggle").setAttribute("aria-expanded", "false"); }
+  else { $("exBody").removeAttribute("hidden"); $("exToggle").setAttribute("aria-expanded", "true"); }
 });
 loadCoverage();
 window.addEventListener("load", initMap);
