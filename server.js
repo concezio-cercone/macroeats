@@ -446,6 +446,8 @@ async function fetchNearbyRaw(lat, lng, radiusMi) {
   way["amenity"="restaurant"](around:${r},${lat},${lng});
   node["amenity"="fast_food"](around:${r},${lat},${lng});
   way["amenity"="fast_food"](around:${r},${lat},${lng});
+  node["amenity"="ice_cream"](around:${r},${lat},${lng});
+  way["amenity"="ice_cream"](around:${r},${lat},${lng});
 );
 out tags center 200000;`;
   const body = "data=" + encodeURIComponent(query);

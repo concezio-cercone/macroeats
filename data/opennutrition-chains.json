@@ -2,7 +2,7 @@
  "source": "OpenNutrition dataset (https://www.opennutrition.app), restaurant rows only, licensed under ODbL. Macros are official published figures converted from per-100g; prices are estimates.",
  "attribution": "OpenNutrition — https://www.opennutrition.app (ODbL)",
  "chainCount": 48,
- "itemCount": 1660,
+ "itemCount": 1661,
  "chains": {
   "applebees": {
    "name": "Applebee's",
@@ -146,53 +146,53 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Applebee's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "8 oz. USDA Select Top Sirloin",
+     "name": "Savory Cedar Salmon",
      "course": "main",
      "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 620,
-      "protein": 53,
-      "carbs": 44,
-      "fat": 27
+      "cal": 600,
+      "protein": 45,
+      "carbs": 26,
+      "fat": 28
      },
      "modifiers": [],
      "micros": {
-      "sodium": 2000,
+      "sodium": 1570,
       "fiber": 7,
-      "sugar": 6,
-      "addedSugar": 0,
-      "satFat": 11,
-      "chol": 130
+      "sugar": 10,
+      "addedSugar": 8,
+      "satFat": 8,
+      "chol": 75
      },
-     "allergens": null,
+     "allergens": [
+      "fish"
+     ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Applebee's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Kids Cheesy Pizza",
+     "name": "Boneless Wings",
      "course": "main",
      "carbType": "refined",
-     "cheese": true,
+     "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 670,
-      "protein": 25,
-      "carbs": 85,
-      "fat": 27
+      "cal": 660,
+      "protein": 38,
+      "carbs": 54,
+      "fat": 32
      },
      "modifiers": [],
      "micros": {
-      "sodium": 1310,
+      "sodium": 1720,
       "fiber": 4,
-      "sugar": 13,
-      "addedSugar": 5,
-      "satFat": 13,
-      "chol": 40
+      "sugar": 1,
+      "addedSugar": 0,
+      "satFat": 6,
+      "chol": 140
      },
-     "allergens": [
-      "milk"
-     ],
+     "allergens": null,
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Applebee's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
@@ -324,30 +324,30 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Applebee's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Sizzlin’ Butter Pecan Blondie",
+     "name": "Grilled Chicken Tender Salad",
      "course": "main",
      "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 1020,
-      "protein": 13,
-      "carbs": 115,
-      "fat": 57
+      "cal": 1030,
+      "protein": 62,
+      "carbs": 57,
+      "fat": 64
      },
      "modifiers": [],
      "micros": {
-      "sodium": 390,
-      "fiber": 2,
-      "sugar": 71,
-      "addedSugar": 60,
-      "satFat": 31,
-      "chol": 180
+      "sodium": 1920,
+      "fiber": 6,
+      "sugar": 27,
+      "addedSugar": 15,
+      "satFat": 18,
+      "chol": 230
      },
      "allergens": [
-      "eggs",
+      "gluten",
       "milk",
-      "tree_nuts"
+      "wheat"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Applebee's, converted from per-100g to per-serving. Price is an estimate."
     },
@@ -504,49 +504,52 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Applebee's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Spicy Honey Mustard Chicken Sandwich with Fried Chicken",
+     "name": "Four-Cheese Mac & Cheese with Honey Pepper Chicken Tenders",
      "course": "main",
      "carbType": "refined",
-     "cheese": false,
+     "cheese": true,
      "price": 11.0,
      "base": {
-      "cal": 1350,
-      "protein": 58,
-      "carbs": 122,
-      "fat": 70
+      "cal": 1360,
+      "protein": 55,
+      "carbs": 160,
+      "fat": 55
      },
      "modifiers": [],
      "micros": {
-      "sodium": 3230,
-      "fiber": 8,
-      "sugar": 22,
-      "addedSugar": 18,
-      "satFat": 13,
-      "chol": 140
+      "sodium": 3300,
+      "fiber": 7,
+      "sugar": 44,
+      "addedSugar": 30,
+      "satFat": 28,
+      "chol": 170
      },
-     "allergens": null,
+     "allergens": [
+      "milk",
+      "soy"
+     ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Applebee's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Bourbon Street Chicken & Andouille Sausage Penne",
+     "name": "Neighborhood Burger",
      "course": "main",
      "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
       "cal": 1410,
-      "protein": 82,
-      "carbs": 85,
-      "fat": 83
+      "protein": 50,
+      "carbs": 94,
+      "fat": 94
      },
      "modifiers": [],
      "micros": {
-      "sodium": 3300,
-      "fiber": 6,
-      "sugar": 12,
-      "addedSugar": 4,
-      "satFat": 18,
-      "chol": 225
+      "sodium": 3010,
+      "fiber": 7,
+      "sugar": 8,
+      "addedSugar": 0,
+      "satFat": 31,
+      "chol": 130
      },
      "allergens": [
       "milk"
@@ -972,25 +975,25 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Applebee's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Oreo Cookie Shake",
+     "name": "Chocolate Shake",
      "course": "dessert",
      "carbType": "refined",
      "cheese": false,
      "price": 6.0,
      "base": {
-      "cal": 840,
+      "cal": 900,
       "protein": 15,
-      "carbs": 104,
-      "fat": 41
+      "carbs": 132,
+      "fat": 35
      },
      "modifiers": [],
      "micros": {
-      "sodium": 440,
+      "sodium": 140,
       "fiber": 1,
-      "sugar": 72,
-      "addedSugar": 70,
-      "satFat": 22,
-      "chol": 135
+      "sugar": 107,
+      "addedSugar": 90,
+      "satFat": 20,
+      "chol": 370
      },
      "allergens": [
       "milk"
@@ -998,27 +1001,28 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Applebee's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Sizzlin’ Caramel Apple Pie",
+     "name": "Sizzlin’ Butter Pecan Blondie",
      "course": "dessert",
      "carbType": "refined",
      "cheese": false,
      "price": 6.0,
      "base": {
-      "cal": 1030,
-      "protein": 8,
-      "carbs": 151,
-      "fat": 45
+      "cal": 1020,
+      "protein": 13,
+      "carbs": 115,
+      "fat": 57
      },
      "modifiers": [],
      "micros": {
-      "sodium": 980,
-      "fiber": 4,
-      "sugar": 87,
-      "addedSugar": 65,
-      "satFat": 20,
-      "chol": 110
+      "sodium": 390,
+      "fiber": 2,
+      "sugar": 71,
+      "addedSugar": 60,
+      "satFat": 31,
+      "chol": 180
      },
      "allergens": [
+      "eggs",
       "milk",
       "tree_nuts"
      ],
@@ -1254,55 +1258,32 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Cherry Turnover",
+     "name": "Chicken Tenders, 3 Piece",
      "course": "main",
      "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 390,
-      "protein": 4,
-      "carbs": 65,
-      "fat": 13
-     },
-     "modifiers": [],
-     "micros": {
-      "sodium": 200,
-      "fiber": 2,
-      "sugar": 40,
-      "addedSugar": 35,
-      "satFat": 6,
-      "chol": 0
-     },
-     "allergens": [
-      "gluten",
-      "milk",
-      "wheat"
-     ],
-     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
-    },
-    {
-     "name": "Apple Turnover",
-     "course": "main",
-     "carbType": "refined",
-     "cheese": false,
-     "price": 11.0,
-     "base": {
-      "cal": 430,
-      "protein": 4,
-      "carbs": 65,
+      "cal": 370,
+      "protein": 23,
+      "carbs": 28,
       "fat": 18
      },
      "modifiers": [],
      "micros": {
-      "sodium": 210,
-      "fiber": 2,
-      "sugar": 39,
-      "addedSugar": 29,
-      "satFat": 9,
-      "chol": 10
+      "sodium": 1190,
+      "fiber": 0,
+      "sugar": 1,
+      "addedSugar": 0,
+      "satFat": 5,
+      "chol": 60
      },
-     "allergens": [],
+     "allergens": [
+      "eggs",
+      "gluten",
+      "soy",
+      "wheat"
+     ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
@@ -1410,29 +1391,28 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Crispy Chicken Sandwich",
+     "name": "Classic French Dip & Swiss Sandwich with Au Jus",
      "course": "main",
      "carbType": "refined",
-     "cheese": false,
+     "cheese": true,
      "price": 11.0,
      "base": {
       "cal": 530,
-      "protein": 24,
-      "carbs": 59,
-      "fat": 22
+      "protein": 34,
+      "carbs": 50,
+      "fat": 21
      },
      "modifiers": [],
      "micros": {
-      "sodium": 1410,
-      "fiber": 4,
-      "sugar": 13,
-      "addedSugar": 7,
-      "satFat": 5,
-      "chol": 55
+      "sodium": 2540,
+      "fiber": 2,
+      "sugar": 3,
+      "addedSugar": 0,
+      "satFat": 10,
+      "chol": 85
      },
      "allergens": [
-      "gluten",
-      "wheat"
+      "milk"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
@@ -1461,28 +1441,29 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Crispy Fish Sandwich",
+     "name": "Fish 'N Cheddar Sandwich",
      "course": "main",
      "carbType": "refined",
-     "cheese": false,
+     "cheese": true,
      "price": 11.0,
      "base": {
-      "cal": 570,
+      "cal": 540,
       "protein": 20,
       "carbs": 65,
-      "fat": 25
+      "fat": 22
      },
      "modifiers": [],
      "micros": {
-      "sodium": 990,
+      "sodium": 1030,
       "fiber": 3,
-      "sugar": 9,
-      "addedSugar": 4,
+      "sugar": 7,
+      "addedSugar": 3,
       "satFat": 4,
       "chol": 50
      },
      "allergens": [
       "fish",
+      "milk",
       "sesame"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
@@ -1507,6 +1488,32 @@
       "addedSugar": 8,
       "satFat": 12,
       "chol": 105
+     },
+     "allergens": [
+      "milk"
+     ],
+     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
+    },
+    {
+     "name": "Deluxe Wagyu Steakhouse Burger",
+     "course": "main",
+     "carbType": "refined",
+     "cheese": false,
+     "price": 11.0,
+     "base": {
+      "cal": 600,
+      "protein": 31,
+      "carbs": 45,
+      "fat": 33
+     },
+     "modifiers": [],
+     "micros": {
+      "sodium": 1370,
+      "fiber": 3,
+      "sugar": 13,
+      "addedSugar": 8,
+      "satFat": 13,
+      "chol": 95
      },
      "allergens": [
       "milk"
@@ -1543,28 +1550,28 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Classic Roast Beef Sandwich, Half Pound",
+     "name": "Beef 'n Cheddar Sandwich, Double",
      "course": "main",
      "carbType": "refined",
-     "cheese": false,
+     "cheese": true,
      "price": 11.0,
      "base": {
-      "cal": 610,
-      "protein": 48,
-      "carbs": 38,
-      "fat": 30
+      "cal": 630,
+      "protein": 39,
+      "carbs": 48,
+      "fat": 32
      },
      "modifiers": [],
      "micros": {
-      "sodium": 2040,
+      "sodium": 2100,
       "fiber": 2,
-      "sugar": 5,
-      "addedSugar": 0,
-      "satFat": 12,
-      "chol": 130
+      "sugar": 9,
+      "addedSugar": 9,
+      "satFat": 11,
+      "chol": 100
      },
      "allergens": [
-      "sesame"
+      "milk"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
@@ -1597,29 +1604,29 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Chicken Bacon & Swiss Sandwich",
+     "name": "Reuben Sandwich",
      "course": "main",
      "carbType": "refined",
-     "cheese": true,
+     "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 650,
-      "protein": 35,
-      "carbs": 61,
-      "fat": 30
+      "cal": 680,
+      "protein": 37,
+      "carbs": 62,
+      "fat": 31
      },
      "modifiers": [],
      "micros": {
-      "sodium": 1760,
+      "sodium": 2420,
       "fiber": 4,
-      "sugar": 14,
-      "addedSugar": 6,
-      "satFat": 9,
-      "chol": 85
+      "sugar": 5,
+      "addedSugar": 3,
+      "satFat": 8,
+      "chol": 80
      },
      "allergens": [
-      "milk",
-      "sesame"
+      "gluten",
+      "milk"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
@@ -1781,6 +1788,32 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
+     "name": "Classic Roast Beef Sandwich, Half Pound",
+     "course": "main",
+     "carbType": "refined",
+     "cheese": false,
+     "price": 11.0,
+     "base": {
+      "cal": 610,
+      "protein": 48,
+      "carbs": 38,
+      "fat": 30
+     },
+     "modifiers": [],
+     "micros": {
+      "sodium": 2040,
+      "fiber": 2,
+      "sugar": 5,
+      "addedSugar": 0,
+      "satFat": 12,
+      "chol": 130
+     },
+     "allergens": [
+      "sesame"
+     ],
+     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
+    },
+    {
      "name": "Crinkle Fries, Medium",
      "course": "side",
      "carbType": "refined",
@@ -1925,6 +1958,34 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
+     "name": "Cherry Turnover",
+     "course": "dessert",
+     "carbType": "refined",
+     "cheese": false,
+     "price": 6.0,
+     "base": {
+      "cal": 390,
+      "protein": 4,
+      "carbs": 65,
+      "fat": 13
+     },
+     "modifiers": [],
+     "micros": {
+      "sodium": 200,
+      "fiber": 2,
+      "sugar": 40,
+      "addedSugar": 35,
+      "satFat": 6,
+      "chol": 0
+     },
+     "allergens": [
+      "gluten",
+      "milk",
+      "wheat"
+     ],
+     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
+    },
+    {
      "name": "Salted Caramel & Chocolate Cookie",
      "course": "dessert",
      "carbType": "refined",
@@ -1981,51 +2042,25 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Jamocha Shake, Regular",
+     "name": "Mint Chocolate Shake, Regular",
      "course": "dessert",
      "carbType": "refined",
      "cheese": false,
      "price": 6.0,
      "base": {
-      "cal": 530,
+      "cal": 610,
       "protein": 12,
-      "carbs": 85,
-      "fat": 16
-     },
-     "modifiers": [],
-     "micros": {
-      "sodium": 320,
-      "fiber": 0,
-      "sugar": 71,
-      "addedSugar": 65,
-      "satFat": 10,
-      "chol": 60
-     },
-     "allergens": [
-      "milk"
-     ],
-     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Arby's, converted from per-100g to per-serving. Price is an estimate."
-    },
-    {
-     "name": "Vanilla Shake, Large",
-     "course": "dessert",
-     "carbType": "refined",
-     "cheese": false,
-     "price": 6.0,
-     "base": {
-      "cal": 620,
-      "protein": 16,
-      "carbs": 93,
+      "carbs": 95,
       "fat": 21
      },
      "modifiers": [],
      "micros": {
-      "sodium": 400,
-      "fiber": 0,
+      "sodium": 290,
+      "fiber": 1,
       "sugar": 85,
-      "addedSugar": 80,
-      "satFat": 14,
-      "chol": 75
+      "addedSugar": 70,
+      "satFat": 15,
+      "chol": 80
      },
      "allergens": [
       "milk"
@@ -3919,33 +3954,6 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Cava, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Chocolate Chip Blondie",
-     "course": "main",
-     "carbType": "refined",
-     "cheese": false,
-     "price": 11.0,
-     "base": {
-      "cal": 270,
-      "protein": 4,
-      "carbs": 42,
-      "fat": 10
-     },
-     "modifiers": [],
-     "micros": {
-      "sodium": 19,
-      "fiber": 0,
-      "sugar": 31,
-      "addedSugar": 31,
-      "satFat": 6,
-      "chol": 68
-     },
-     "allergens": [
-      "eggs",
-      "milk"
-     ],
-     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Cava, converted from per-100g to per-serving. Price is an estimate."
-    },
-    {
      "name": "Greek Salad Bowl",
      "course": "main",
      "carbType": "refined",
@@ -4422,6 +4430,33 @@
       "milk",
       "soy",
       "wheat"
+     ],
+     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Cava, converted from per-100g to per-serving. Price is an estimate."
+    },
+    {
+     "name": "Chocolate Chip Blondie",
+     "course": "dessert",
+     "carbType": "refined",
+     "cheese": false,
+     "price": 6.0,
+     "base": {
+      "cal": 270,
+      "protein": 4,
+      "carbs": 42,
+      "fat": 10
+     },
+     "modifiers": [],
+     "micros": {
+      "sodium": 19,
+      "fiber": 0,
+      "sugar": 31,
+      "addedSugar": 31,
+      "satFat": 6,
+      "chol": 68
+     },
+     "allergens": [
+      "eggs",
+      "milk"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Cava, converted from per-100g to per-serving. Price is an estimate."
     },
@@ -9332,32 +9367,6 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Dairy Queen, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "DQ Fudge Bar (No Sugar Added)",
-     "course": "side",
-     "carbType": "refined",
-     "cheese": false,
-     "price": 5.0,
-     "base": {
-      "cal": 50,
-      "protein": 4,
-      "carbs": 13,
-      "fat": 0
-     },
-     "modifiers": [],
-     "micros": {
-      "sodium": 55,
-      "fiber": 1,
-      "sugar": 9,
-      "addedSugar": 0,
-      "satFat": 0,
-      "chol": 0
-     },
-     "allergens": [
-      "milk"
-     ],
-     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Dairy Queen, converted from per-100g to per-serving. Price is an estimate."
-    },
-    {
      "name": "Fries, Large",
      "course": "side",
      "carbType": "refined",
@@ -9408,25 +9417,25 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Dairy Queen, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Strawberry Sundae, Small",
+     "name": "DQ Fudge Bar (No Sugar Added)",
      "course": "dessert",
      "carbType": "refined",
      "cheese": false,
      "price": 6.0,
      "base": {
-      "cal": 240,
-      "protein": 6,
-      "carbs": 39,
-      "fat": 7
+      "cal": 50,
+      "protein": 4,
+      "carbs": 13,
+      "fat": 0
      },
      "modifiers": [],
      "micros": {
-      "sodium": 95,
-      "fiber": 0,
-      "sugar": 34,
-      "addedSugar": 34,
-      "satFat": 4,
-      "chol": 30
+      "sodium": 55,
+      "fiber": 1,
+      "sugar": 9,
+      "addedSugar": 0,
+      "satFat": 0,
+      "chol": 0
      },
      "allergens": [
       "milk"
@@ -9434,53 +9443,58 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Dairy Queen, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Choco Brownie Extreme Blizzard, Mini",
+     "name": "Waffle Cone",
      "course": "dessert",
      "carbType": "refined",
      "cheese": false,
      "price": 6.0,
      "base": {
       "cal": 420,
-      "protein": 9,
-      "carbs": 58,
-      "fat": 18
+      "protein": 8,
+      "carbs": 70,
+      "fat": 12
      },
      "modifiers": [],
      "micros": {
-      "sodium": 190,
-      "fiber": 2,
-      "sugar": 46,
-      "addedSugar": 46,
-      "satFat": 10,
-      "chol": 30
+      "sodium": 150,
+      "fiber": 0,
+      "sugar": 59,
+      "addedSugar": 50,
+      "satFat": 7,
+      "chol": 37
      },
      "allergens": [
-      "milk"
+      "eggs",
+      "gluten",
+      "milk",
+      "wheat"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Dairy Queen, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Snickers Blizzard, Small",
+     "name": "Oreo Cookie Blizzard, Small",
      "course": "dessert",
      "carbType": "refined",
      "cheese": false,
      "price": 6.0,
      "base": {
-      "cal": 610,
-      "protein": 14,
-      "carbs": 93,
-      "fat": 20
+      "cal": 600,
+      "protein": 13,
+      "carbs": 89,
+      "fat": 22
      },
      "modifiers": [],
      "micros": {
-      "sodium": 260,
+      "sodium": 280,
       "fiber": 1,
-      "sugar": 79,
-      "addedSugar": 70,
-      "satFat": 11,
+      "sugar": 70,
+      "addedSugar": 55,
+      "satFat": 12,
       "chol": 50
      },
-     "allergens": null,
+     "allergens": [
+      "milk"
+     ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Dairy Queen, converted from per-100g to per-serving. Price is an estimate."
     },
     {
@@ -26766,7 +26780,8 @@
     "Salads"
    ],
    "diets": [
-    "high-protein"
+    "high-protein",
+    "keto-option"
    ],
    "items": [
     {
@@ -26850,52 +26865,78 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Coconut Macaroon",
+     "name": "Creamy Tomato Soup, Cup",
      "course": "main",
      "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 190,
-      "protein": 2,
-      "carbs": 24,
-      "fat": 10
+      "cal": 200,
+      "protein": 3,
+      "carbs": 17,
+      "fat": 13
      },
      "modifiers": [],
      "micros": {
-      "sodium": 95,
-      "fiber": 2,
-      "sugar": 20,
-      "addedSugar": 20,
-      "satFat": 10,
-      "chol": 0
+      "sodium": 580,
+      "fiber": 3,
+      "sugar": 12,
+      "addedSugar": 2,
+      "satFat": 8,
+      "chol": 35
      },
      "allergens": [
-      "eggs",
+      "milk"
+     ],
+     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
+    },
+    {
+     "name": "Fuji Apple Salad with Chicken, Half",
+     "course": "main",
+     "carbType": "refined",
+     "cheese": false,
+     "price": 11.0,
+     "base": {
+      "cal": 225,
+      "protein": 16,
+      "carbs": 17,
+      "fat": 11
+     },
+     "modifiers": [],
+     "micros": {
+      "sodium": 480,
+      "fiber": 2,
+      "sugar": 11,
+      "addedSugar": 6,
+      "satFat": 3,
+      "chol": 55
+     },
+     "allergens": [
+      "milk",
       "tree_nuts"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Rustic Baked Potato Soup, Cup",
+     "name": "Bistro French Onion Soup, Cup",
      "course": "main",
-     "carbType": "none",
+     "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 220,
-      "protein": 7,
-      "carbs": 12,
-      "fat": 16
+      "cal": 250,
+      "protein": 11,
+      "carbs": 24,
+      "fat": 13
      },
      "modifiers": [],
      "micros": {
-      "sodium": 870,
+      "sodium": 960,
       "fiber": 3,
-      "sugar": 0,
-      "addedSugar": 0,
-      "satFat": 10,
-      "chol": 60
+      "sugar": 9,
+      "addedSugar": 2,
+      "satFat": 7,
+      "chol": 30
      },
      "allergens": [
       "milk"
@@ -26903,128 +26944,184 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Broccoli Cheddar Soup, Cup",
-     "course": "main",
-     "carbType": "refined",
-     "cheese": true,
-     "price": 11.0,
-     "base": {
-      "cal": 230,
-      "protein": 9,
-      "carbs": 17,
-      "fat": 15
-     },
-     "modifiers": [],
-     "micros": {
-      "sodium": 680,
-      "fiber": 1,
-      "sugar": 6,
-      "addedSugar": 0,
-      "satFat": 9,
-      "chol": 50
-     },
-     "allergens": [
-      "milk"
-     ],
-     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
-    },
-    {
-     "name": "Cream of Chicken & Wild Rice Soup, Bowl",
+     "name": "Mediterranean Greens & Grains, Half",
      "course": "main",
      "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 260,
-      "protein": 9,
-      "carbs": 25,
-      "fat": 14
-     },
-     "modifiers": [],
-     "micros": {
-      "sodium": 1180,
-      "fiber": 2,
-      "sugar": 2,
-      "addedSugar": 0,
-      "satFat": 8,
-      "chol": 50
-     },
-     "allergens": [
-      "milk"
-     ],
-     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
-    },
-    {
-     "name": "Plain Bagel",
-     "course": "main",
-     "carbType": "refined",
-     "cheese": false,
-     "price": 11.0,
-     "base": {
-      "cal": 280,
-      "protein": 10,
-      "carbs": 57,
-      "fat": 1
+      "cal": 270,
+      "protein": 5,
+      "carbs": 20,
+      "fat": 19
      },
      "modifiers": [],
      "micros": {
       "sodium": 410,
-      "fiber": 2,
-      "sugar": 4,
-      "addedSugar": 4,
-      "satFat": 0,
-      "chol": 0
+      "fiber": 3,
+      "sugar": 3,
+      "addedSugar": 1,
+      "satFat": 4,
+      "chol": 10
      },
-     "allergens": [],
+     "allergens": [
+      "milk"
+     ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Asiago Cheese Bagel",
+     "name": "Everything Bagel",
      "course": "main",
      "carbType": "refined",
-     "cheese": true,
+     "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 320,
-      "protein": 14,
-      "carbs": 55,
-      "fat": 5
+      "cal": 290,
+      "protein": 10,
+      "carbs": 58,
+      "fat": 2
      },
      "modifiers": [],
      "micros": {
-      "sodium": 540,
+      "sodium": 560,
       "fiber": 2,
       "sugar": 4,
-      "addedSugar": 1,
-      "satFat": 3,
-      "chol": 15
+      "addedSugar": 2,
+      "satFat": 0,
+      "chol": 0
      },
      "allergens": [
       "gluten",
-      "milk",
+      "sesame",
       "wheat"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Vegetarian Autumn Squash Soup, Bowl",
+     "name": "Caesar Salad, Whole",
+     "course": "main",
+     "carbType": "refined",
+     "cheese": false,
+     "price": 11.0,
+     "base": {
+      "cal": 320,
+      "protein": 10,
+      "carbs": 14,
+      "fat": 26
+     },
+     "modifiers": [],
+     "micros": {
+      "sodium": 600,
+      "fiber": 2,
+      "sugar": 2,
+      "addedSugar": 0,
+      "satFat": 9,
+      "chol": 30
+     },
+     "allergens": [
+      "eggs",
+      "fish",
+      "milk",
+      "soy"
+     ],
+     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
+    },
+    {
+     "name": "Summer Corn Chowder, Bowl",
      "course": "main",
      "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
       "cal": 330,
-      "protein": 8,
-      "carbs": 41,
-      "fat": 16
+      "protein": 6,
+      "carbs": 39,
+      "fat": 18
      },
      "modifiers": [],
      "micros": {
-      "sodium": 1210,
-      "fiber": 5,
-      "sugar": 33,
-      "addedSugar": 15,
-      "satFat": 7,
+      "sodium": 980,
+      "fiber": 4,
+      "sugar": 9,
+      "addedSugar": 0,
+      "satFat": 11,
+      "chol": 10
+     },
+     "allergens": [
+      "milk"
+     ],
+     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
+    },
+    {
+     "name": "Strawberry Poppyseed Salad with Chicken",
+     "course": "main",
+     "carbType": "refined",
+     "cheese": false,
+     "price": 11.0,
+     "base": {
+      "cal": 340,
+      "protein": 28,
+      "carbs": 29,
+      "fat": 13
+     },
+     "modifiers": [],
+     "micros": {
+      "sodium": 300,
+      "fiber": 6,
+      "sugar": 20,
+      "addedSugar": 8,
+      "satFat": 2,
+      "chol": 85
+     },
+     "allergens": [
+      "tree_nuts"
+     ],
+     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
+    },
+    {
+     "name": "Cranberry Orange Loaf Slice",
+     "course": "main",
+     "carbType": "refined",
+     "cheese": false,
+     "price": 3.0,
+     "base": {
+      "cal": 360,
+      "protein": 5,
+      "carbs": 53,
+      "fat": 13
+     },
+     "modifiers": [
+      {
+       "id": "add-slice",
+       "label": "+1 slice",
+       "default": false,
+       "d": {
+        "cal": 360,
+        "protein": 5,
+        "carbs": 53,
+        "fat": 13
+       },
+       "dPrice": 3.0
+      },
+      {
+       "id": "add-2-slices",
+       "label": "+2 slices",
+       "default": false,
+       "d": {
+        "cal": 720,
+        "protein": 10,
+        "carbs": 106,
+        "fat": 26
+       },
+       "dPrice": 6.0
+      }
+     ],
+     "micros": {
+      "sodium": 310,
+      "fiber": 1,
+      "sugar": 32,
+      "addedSugar": 32,
+      "satFat": 3,
       "chol": 50
      },
      "allergens": [
@@ -27033,135 +27130,80 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Mediterranean Greens & Grains with Chicken, Half",
-     "course": "main",
-     "carbType": "refined",
-     "cheese": false,
-     "price": 11.0,
-     "base": {
-      "cal": 340,
-      "protein": 19,
-      "carbs": 21,
-      "fat": 20
-     },
-     "modifiers": [],
-     "micros": {
-      "sodium": 700,
-      "fiber": 3,
-      "sugar": 3,
-      "addedSugar": 1,
-      "satFat": 4,
-      "chol": 55
-     },
-     "allergens": [
-      "milk"
-     ],
-     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
-    },
-    {
-     "name": "Rustic Baked Potato Soup, Bowl",
-     "course": "main",
-     "carbType": "refined",
-     "cheese": false,
-     "price": 11.0,
-     "base": {
-      "cal": 340,
-      "protein": 12,
-      "carbs": 19,
-      "fat": 25
-     },
-     "modifiers": [],
-     "micros": {
-      "sodium": 1330,
-      "fiber": 4,
-      "sugar": 0,
-      "addedSugar": 0,
-      "satFat": 16,
-      "chol": 90
-     },
-     "allergens": [
-      "milk"
-     ],
-     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
-    },
-    {
-     "name": "Steel Cut Oatmeal with Strawberries, Pecans & Cinnamon Crunch Topping",
+     "name": "Bistro French Onion Soup, Bowl",
      "course": "main",
      "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
       "cal": 370,
-      "protein": 8,
-      "carbs": 52,
-      "fat": 14
+      "protein": 19,
+      "carbs": 36,
+      "fat": 18
      },
      "modifiers": [],
      "micros": {
-      "sodium": 170,
-      "fiber": 7,
-      "sugar": 17,
-      "addedSugar": 5,
-      "satFat": 2,
-      "chol": 0
+      "sodium": 1430,
+      "fiber": 5,
+      "sugar": 20,
+      "addedSugar": 3,
+      "satFat": 9,
+      "chol": 45
      },
      "allergens": [
-      "tree_nuts"
-     ],
-     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
-    },
-    {
-     "name": "Ham, Egg & Cheese on Ciabatta",
-     "course": "main",
-     "carbType": "refined",
-     "cheese": true,
-     "price": 11.0,
-     "base": {
-      "cal": 410,
-      "protein": 25,
-      "carbs": 40,
-      "fat": 17
-     },
-     "modifiers": [],
-     "micros": {
-      "sodium": 930,
-      "fiber": 2,
-      "sugar": 1,
-      "addedSugar": 0,
-      "satFat": 8,
-      "chol": 300
-     },
-     "allergens": [
-      "eggs",
       "milk"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Cinnamon Crunch Bagel",
+     "name": "Chicken Cordon Bleu Melt, Half",
      "course": "main",
      "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 430,
-      "protein": 9,
-      "carbs": 82,
-      "fat": 7
+      "cal": 410,
+      "protein": 28,
+      "carbs": 35,
+      "fat": 18
      },
      "modifiers": [],
      "micros": {
-      "sodium": 380,
-      "fiber": 2,
-      "sugar": 32,
-      "addedSugar": 30,
-      "satFat": 5,
-      "chol": 0
+      "sodium": 1070,
+      "fiber": 1,
+      "sugar": 3,
+      "addedSugar": 1,
+      "satFat": 7,
+      "chol": 88
      },
      "allergens": [
-      "gluten",
-      "milk",
-      "wheat"
+      "milk"
+     ],
+     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
+    },
+    {
+     "name": "Green Goddess Caprese Melt, Half",
+     "course": "main",
+     "carbType": "refined",
+     "cheese": false,
+     "price": 11.0,
+     "base": {
+      "cal": 445,
+      "protein": 16,
+      "carbs": 42,
+      "fat": 23
+     },
+     "modifiers": [],
+     "micros": {
+      "sodium": 655,
+      "fiber": 2,
+      "sugar": 4,
+      "addedSugar": 1,
+      "satFat": 8,
+      "chol": 40
+     },
+     "allergens": [
+      "milk"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
@@ -27194,25 +27236,25 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Mac & Cheese, Small",
+     "name": "Pepperoni Mozzarella Melt, Half",
      "course": "main",
      "carbType": "refined",
      "cheese": true,
      "price": 11.0,
      "base": {
-      "cal": 480,
-      "protein": 16,
-      "carbs": 34,
-      "fat": 32
+      "cal": 505,
+      "protein": 22,
+      "carbs": 47,
+      "fat": 28
      },
      "modifiers": [],
      "micros": {
-      "sodium": 1150,
-      "fiber": 0,
-      "sugar": 7,
+      "sodium": 1290,
+      "fiber": 1,
+      "sugar": 4,
       "addedSugar": 2,
-      "satFat": 17,
-      "chol": 85
+      "satFat": 10,
+      "chol": 58
      },
      "allergens": [
       "milk"
@@ -27220,25 +27262,25 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Mediterranean Greens & Grains, Whole",
+     "name": "Greek Salad with Chicken, Whole",
      "course": "main",
      "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 540,
-      "protein": 11,
-      "carbs": 41,
-      "fat": 39
+      "cal": 550,
+      "protein": 35,
+      "carbs": 19,
+      "fat": 38
      },
      "modifiers": [],
      "micros": {
-      "sodium": 820,
-      "fiber": 6,
-      "sugar": 6,
-      "addedSugar": 2,
-      "satFat": 7,
-      "chol": 15
+      "sodium": 1700,
+      "fiber": 4,
+      "sugar": 9,
+      "addedSugar": 0,
+      "satFat": 9,
+      "chol": 125
      },
      "allergens": [
       "milk"
@@ -27272,29 +27314,28 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Napa Almond Chicken Salad Sandwich, Whole",
+     "name": "Zesty Tuscan Asiago Bagel Stack",
      "course": "main",
      "carbType": "refined",
      "cheese": false,
      "price": 11.0,
      "base": {
-      "cal": 640,
-      "protein": 29,
-      "carbs": 70,
-      "fat": 28
+      "cal": 660,
+      "protein": 38,
+      "carbs": 58,
+      "fat": 31
      },
      "modifiers": [],
      "micros": {
-      "sodium": 780,
-      "fiber": 6,
-      "sugar": 11,
-      "addedSugar": 4,
-      "satFat": 4,
-      "chol": 80
+      "sodium": 1510,
+      "fiber": 2,
+      "sugar": 5,
+      "addedSugar": 2,
+      "satFat": 12,
+      "chol": 110
      },
      "allergens": [
-      "milk",
-      "tree_nuts"
+      "milk"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
@@ -27323,27 +27364,28 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Smoky Buffalo Chicken Melt, Whole",
+     "name": "Sausage, Egg & Cheese on Asiago Bagel",
      "course": "main",
      "carbType": "refined",
-     "cheese": false,
+     "cheese": true,
      "price": 11.0,
      "base": {
-      "cal": 800,
-      "protein": 53,
-      "carbs": 70,
-      "fat": 34
+      "cal": 810,
+      "protein": 32,
+      "carbs": 58,
+      "fat": 50
      },
      "modifiers": [],
      "micros": {
-      "sodium": 2180,
+      "sodium": 1460,
       "fiber": 2,
-      "sugar": 4,
+      "sugar": 5,
       "addedSugar": 2,
-      "satFat": 14,
-      "chol": 145
+      "satFat": 20,
+      "chol": 345
      },
      "allergens": [
+      "eggs",
       "milk"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
@@ -27479,6 +27521,32 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
+     "name": "Smoky Buffalo Chicken Melt, Whole",
+     "course": "main",
+     "carbType": "refined",
+     "cheese": false,
+     "price": 11.0,
+     "base": {
+      "cal": 800,
+      "protein": 53,
+      "carbs": 70,
+      "fat": 34
+     },
+     "modifiers": [],
+     "micros": {
+      "sodium": 2180,
+      "fiber": 2,
+      "sugar": 4,
+      "addedSugar": 2,
+      "satFat": 14,
+      "chol": 145
+     },
+     "allergens": [
+      "milk"
+     ],
+     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
+    },
+    {
      "name": "Steak & White Cheddar Panini, Whole",
      "course": "main",
      "carbType": "refined",
@@ -27583,111 +27651,106 @@
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Greek Yogurt with Mixed Berries Parfait",
+     "name": "Coconut Macaroon",
      "course": "dessert",
      "carbType": "refined",
      "cheese": false,
      "price": 6.0,
      "base": {
-      "cal": 250,
-      "protein": 16,
-      "carbs": 29,
-      "fat": 9
+      "cal": 190,
+      "protein": 2,
+      "carbs": 24,
+      "fat": 10
      },
      "modifiers": [],
      "micros": {
-      "sodium": 80,
+      "sodium": 95,
       "fiber": 2,
-      "sugar": 17,
-      "addedSugar": 7,
-      "satFat": 4,
-      "chol": 25
-     },
-     "allergens": [
-      "milk"
-     ],
-     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
-    },
-    {
-     "name": "Chocolate Chipper Cookie",
-     "course": "dessert",
-     "carbType": "refined",
-     "cheese": false,
-     "price": 6.0,
-     "base": {
-      "cal": 390,
-      "protein": 4,
-      "carbs": 52,
-      "fat": 19
-     },
-     "modifiers": [],
-     "micros": {
-      "sodium": 290,
-      "fiber": 2,
-      "sugar": 31,
-      "addedSugar": 31,
-      "satFat": 11,
-      "chol": 50
+      "sugar": 20,
+      "addedSugar": 20,
+      "satFat": 10,
+      "chol": 0
      },
      "allergens": [
       "eggs",
-      "milk"
+      "tree_nuts"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Pumpkin Cookie",
+     "name": "Cherry Pastry",
      "course": "dessert",
      "carbType": "refined",
      "cheese": false,
+     "price": 6.0,
+     "base": {
+      "cal": 340,
+      "protein": 6,
+      "carbs": 48,
+      "fat": 14
+     },
+     "modifiers": [],
+     "micros": {
+      "sodium": 320,
+      "fiber": 1,
+      "sugar": 22,
+      "addedSugar": 18,
+      "satFat": 8,
+      "chol": 40
+     },
+     "allergens": null,
+     "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
+    },
+    {
+     "name": "Egg & Cheese on Croissant",
+     "course": "dessert",
+     "carbType": "refined",
+     "cheese": true,
      "price": 6.0,
      "base": {
       "cal": 450,
-      "protein": 4,
-      "carbs": 62,
-      "fat": 21
+      "protein": 18,
+      "carbs": 33,
+      "fat": 27
      },
      "modifiers": [],
      "micros": {
-      "sodium": 210,
+      "sodium": 500,
       "fiber": 1,
-      "sugar": 37,
-      "addedSugar": 37,
+      "sugar": 4,
+      "addedSugar": 0,
       "satFat": 13,
-      "chol": 65
+      "chol": 285
      },
      "allergens": [
       "eggs",
-      "gluten",
-      "milk",
-      "wheat"
+      "milk"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },
     {
-     "name": "Candy Cookie",
+     "name": "Almond Pastry",
      "course": "dessert",
      "carbType": "refined",
      "cheese": false,
      "price": 6.0,
      "base": {
       "cal": 480,
-      "protein": 4,
-      "carbs": 68,
-      "fat": 22
+      "protein": 9,
+      "carbs": 50,
+      "fat": 28
      },
      "modifiers": [],
      "micros": {
-      "sodium": 310,
-      "fiber": 1,
-      "sugar": 37,
-      "addedSugar": 37,
+      "sodium": 300,
+      "fiber": 3,
+      "sugar": 21,
+      "addedSugar": 21,
       "satFat": 13,
-      "chol": 80
+      "chol": 75
      },
      "allergens": [
-      "eggs",
-      "milk"
+      "tree_nuts"
      ],
      "source": "OpenNutrition (opennutrition.app), ODbL — official published nutrition for Panera Bread, converted from per-100g to per-serving. Price is an estimate."
     },

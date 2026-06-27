@@ -125,7 +125,8 @@ DESSERT_WORDS = ["cake", "cheesecake", "brownie", "cookie", "donut", "doughnut",
                  "sundae", "milkshake", "shake", "float", "muffin", "scone", "croissant",
                  "danish", "churro", "pie", "parfait", "custard", "pastry", "tart", "macaron",
                  "cupcake", "gelato", "mcflurry", "frosty", "concrete", "pudding", "tiramisu",
-                 "cobbler", "cannoli", "sherbet", "sorbet", "brulee"]
+                 "cobbler", "cannoli", "sherbet", "sorbet", "brulee", "blondie",
+                 "brookie", "macaroon", "turnover", "eclair", "baklava", "fudge"]
 DESSERT_SUBS = ["ice cream", "cinnamon roll", "waffle cone"]
 SIDE_WORDS = ["fries", "chips", "tots", "tater", "breadstick", "breadsticks"]
 SIDE_SUBS = ["hash brown", "onion rings", "side salad", "side of"]

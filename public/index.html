@@ -219,6 +219,7 @@
   .ci { display:flex; justify-content:space-between; gap:10px; align-items:baseline; padding:4px 0; font-size:14px; }
   .ci-name { color:var(--text); }
   .ci-name .plus { color:var(--text-faint); font-weight:700; margin-right:4px; }
+  .ci-name .qty { color:var(--on-accent); background:var(--accent); font-weight:700; font-size:11px; padding:0 5px; border-radius:5px; }
   .ci-mods { display:block; font-size:12px; color:var(--text-muted); margin-top:1px; }
   .ci-macros { font-family:'Space Grotesk',sans-serif; font-size:12.5px; color:var(--text-faint); white-space:nowrap; }
   .divider { border-top:1px dashed var(--line); margin:10px 0 12px; }
@@ -233,8 +234,8 @@
   .order { display:inline-block; padding:10px 16px; font-size:14px; font-weight:700; color:#fff; border-radius:10px; text-decoration:none; }
 
   .est-star { color:var(--warn); font-weight:700; cursor:help; position:relative; margin-left:1px; }
-  .est-star .tip { visibility:hidden; opacity:0; transition:opacity .12s ease; position:absolute; bottom:130%; left:50%; transform:translateX(-50%); width:260px; max-width:72vw; background:#16140F; color:#FBF7EF; text-align:left; font-family:'DM Sans',sans-serif; font-weight:400; font-size:12.5px; line-height:1.45; padding:10px 12px; border-radius:10px; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,.22); pointer-events:none; }
-  .est-star .tip::after { content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:6px solid transparent; border-top-color:#16140F; }
+  .est-star .tip { visibility:hidden; opacity:0; transition:opacity .12s ease; position:absolute; bottom:140%; right:0; left:auto; transform:none; width:min(290px,80vw); white-space:normal; overflow-wrap:anywhere; background:#16140F; color:#FBF7EF; text-align:left; font-family:'DM Sans',sans-serif; font-weight:400; font-size:12.5px; line-height:1.45; padding:10px 12px; border-radius:10px; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,.22); pointer-events:none; }
+  .est-star .tip::after { content:""; position:absolute; top:100%; right:10px; border:6px solid transparent; border-top-color:#16140F; }
   .est-star:hover .tip, .est-star:focus .tip { visibility:visible; opacity:1; }
   .tip-head { font-weight:700; color:#C7F02E; display:block; margin-bottom:3px; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; }
 
@@ -510,6 +511,12 @@ const MOODS = [
   {e:"🥘",l:"Korean",f:"korean",g:1},{e:"🍛",l:"Indian",f:"indian",g:1},
   {e:"🥖",l:"Vietnamese",f:"vietnamese",g:1},{e:"🥙",l:"Mediterranean",f:"mediterranean",g:1},
   {e:"🫒",l:"Greek",f:"greek",g:1},
+  {e:"🧆",l:"Middle Eastern",f:"middle eastern",g:1},{e:"🌍",l:"African",f:"african",g:1},
+  {e:"🌎",l:"South American",f:"south american",g:1},{e:"🫓",l:"Central American",f:"central american",g:1},
+  {e:"🥟",l:"Slavic",f:"slavic",g:1},{e:"🧋",l:"Taiwanese",f:"taiwanese",g:1},
+  {e:"🍍",l:"Hawaiian",f:"hawaiian",g:1},{e:"🌽",l:"Native American",f:"native american",g:1},
+  {e:"🍁",l:"Canadian",f:"canadian",g:1},{e:"🥐",l:"French",f:"french",g:1},
+  {e:"🥘",l:"Spanish",f:"spanish",g:1},{e:"🥨",l:"German",f:"german",g:1},
   // --- treats ---
   {e:"🥤",l:"Smoothie",f:"smoothie",g:1},{e:"🍦",l:"Ice cream",f:"ice cream",g:1,d:1},
   {e:"🍩",l:"Donut",f:"donut",g:1,d:1}
@@ -875,7 +882,7 @@ function macroRing(t) {
 // Optional "beyond macros" line — only the nutrients we actually have.
 function microsLine(t) {
   const bits = [];
-  if (t.sodium != null) bits.push('<span><b>Na</b> '+t.sodium+'mg</span>');
+  if (t.sodium != null) bits.push('<span><b>Sodium</b> '+t.sodium+'mg</span>');
   if (t.chol != null) bits.push('<span><b>Chol</b> '+t.chol+'mg</span>');
   if (t.sugar != null) bits.push('<span><b>Sugar</b> '+t.sugar+'g'+(t.addedSugar!=null?' ('+t.addedSugar+'g added)':'')+'</span>');
   if (t.satFat != null) bits.push('<span><b>Sat fat</b> '+t.satFat+'g</span>');
@@ -900,7 +907,7 @@ function cardInner(c, f) {
     else if (it.templated) mark = '<span class="est-star" style="color:var(--danger-text)" tabindex="0" title="Rough estimate — hover">**<span class="tip"><span class="tip-head" style="color:#FBC8A0">⚠ Rough estimate — not from this restaurant</span>'+esc(it.source||'')+'</span></span>';
     else mark = '<span class="est-star" tabindex="0" title="Estimated — hover for how">*<span class="tip"><span class="tip-head">Estimated — how I got this</span>'+esc(it.source||'Estimated; not from the restaurant.')+'</span></span>';
     const modLine = (it.mods && it.mods.length) ? '<span class="ci-mods">'+esc(it.mods.join(", "))+'</span>' : '';
-    return '<div class="ci"><span class="ci-name">'+(idx>0?'<span class="plus">+</span>':'')+esc(it.name)+modLine+'</span>'
+    return '<div class="ci"><span class="ci-name">'+(idx>0?'<span class="plus">+</span>':'')+esc(it.name)+((it.qty>1)?' <span class="qty">×'+it.qty+'</span>':'')+modLine+'</span>'
       + '<span class="ci-macros">'+it.cal+' cal · '+it.protein+'g P'+mark+'</span></div>';
   }).join("");
   const anyEst = c.items.some(it => !it.verified);
@@ -1396,7 +1403,18 @@ function renderMoods() {
 renderMoods();
 $("moods").addEventListener("click", e => {
   const b = e.target.closest(".mood"); if (!b) return;
-  state.mood = (state.mood === b.dataset.food) ? null : b.dataset.food;  // tap again to clear
+  const food = b.dataset.food;
+  if (state.mood === food) {                          // tap the active one -> clear
+    state.mood = null;
+    state.dessertMode = "meal"; $("dessertMode").value = "meal";
+  } else {
+    state.mood = food;
+    const chip = MOODS.find(m => m.f === food) || {};
+    // Browsing a craving shows everything that matches, incl. estimated (*)
+    // discovered places — most world cuisines only exist there.
+    if (chip.g && !filterState.guessed) { filterState.guessed = true; const g = $("fGuessed"); if (g) g.classList.add("on"); }
+    state.dessertMode = chip.d ? "dessert" : "meal"; $("dessertMode").value = state.dessertMode;
+  }
   renderMoods();
   refresh();
 });
